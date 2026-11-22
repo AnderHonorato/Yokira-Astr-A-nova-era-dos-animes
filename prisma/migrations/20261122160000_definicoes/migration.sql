@@ -1,0 +1,14 @@
+CREATE TABLE DefinicaoMissao (chave TEXT PRIMARY KEY NOT NULL, nome TEXT NOT NULL, objetivo TEXT NOT NULL, meta INTEGER NOT NULL CHECK (meta>0), xp INTEGER NOT NULL CHECK (xp>=0), premio TEXT NOT NULL);
+CREATE TABLE FormaMascote (id TEXT PRIMARY KEY NOT NULL, nome TEXT NOT NULL, nivelMinimo INTEGER NOT NULL CHECK (nivelMinimo>=1), detalhe TEXT NOT NULL);
+INSERT INTO DefinicaoMissao VALUES ('descoberta', 'Radar astral', 'Explore duas recomendações de Astra.', 2, 240, 'Medalha Explorador astral');
+INSERT INTO DefinicaoMissao VALUES ('encontro-lunar', 'Encontro lunar', 'Descubra três recomendações durante o festival de novembro.', 3, 360, 'Medalha Festival lunar');
+INSERT INTO DefinicaoMissao VALUES ('veterano', 'Guia dos companheiros', 'Alcance o nível de jornada 3, somando a experiência da coleção.', 3, 120, 'Título Guia dos companheiros');
+INSERT INTO DefinicaoMissao VALUES ('colecionador', 'Curadoria pessoal', 'Salve cinco títulos publicados.', 5, 250, 'Luna, companheira lunar');
+INSERT INTO DefinicaoMissao VALUES ('comunidade', 'Voz da comunidade', 'Avalie três títulos publicados.', 3, 180, 'Medalha Voz da comunidade');
+INSERT INTO DefinicaoMissao VALUES ('temporada', 'Até o último episódio', 'Assista a todos os episódios publicados de uma temporada.', 1, 650, 'Medalha Guardião da temporada');
+INSERT INTO DefinicaoMissao VALUES ('anime', 'Primeiro anime completo', 'Complete todas as temporadas publicadas de um título.', 1, 900, 'Título Cronista astral');
+INSERT INTO FormaMascote VALUES ('despertar', 'Despertar', 1, 'Primeiros passos e expressão curiosa');
+INSERT INTO FormaMascote VALUES ('guardiao', 'Guardião', 10, 'Marcas luminosas e novas expressões');
+INSERT INTO FormaMascote VALUES ('astral', 'Guardião Astral', 25, 'Cauda iluminada e aura orbital');
+INSERT INTO FormaMascote VALUES ('celestial', 'Guardião Celestial', 50, 'Halo celestial e movimentos exclusivos');
+INSERT INTO FormaMascote VALUES ('lendaria', 'Forma Lendária', 80, 'Constelações e luz astral rara');

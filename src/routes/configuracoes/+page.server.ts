@@ -4,7 +4,6 @@
 
 import { dev } from '$app/environment';
 import { fail, redirect } from '@sveltejs/kit';
-import { DESAFIOS } from '$servidor/mascotes/jornada';
 import { banco } from '$servidor/banco/cliente';
 import { enviarVerificacaoDeEmail } from '$servidor/email/fluxos-de-conta';
 import { NOME_COOKIE_TEMA, normalizarTema } from '$lib/validacoes/tema';
@@ -31,18 +30,25 @@ export const load: PageServerLoad = async ({ locals }) => {
       where: { id: locals.usuario.id },
       select: { emailVerificado: true, email: true }
     }),
-    banco.conquistaJornada.findMany({
-      where: { usuarioId: locals.usuario.id, chave: { in: DESAFIOS.map((m) => m.chave) } },
-      select: { chave: true }
+    banco.definicaoMissao.findMany({
+      where: {
+        chave: {
+          in: (
+            await banco.conquistaJornada.findMany({
+              where: { usuarioId: locals.usuario.id },
+              select: { chave: true }
+            })
+          ).map((c) => c.chave)
+        }
+      },
+      select: { premio: true }
     })
   ]);
 
   return {
     tema: locals.tema,
     sessoesAtivas,
-    conquistas: DESAFIOS.filter((m) => conquistas.some((c) => c.chave === m.chave)).map(
-      (m) => m.premio
-    ),
+    conquistas: conquistas.map((c) => c.premio),
     email: conta?.email ?? locals.usuario.email,
     emailVerificado: conta?.emailVerificado ?? false
   };

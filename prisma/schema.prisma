@@ -536,3 +536,19 @@ model ConquistaJornada {
   usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   @@id([usuarioId, chave])
 }
+
+model DefinicaoMissao {
+  chave String @id
+  nome String
+  objetivo String
+  meta Int
+  xp Int
+  premio String
+}
+
+model FormaMascote {
+  id String @id
+  nome String
+  nivelMinimo Int
+  detalhe String
+}

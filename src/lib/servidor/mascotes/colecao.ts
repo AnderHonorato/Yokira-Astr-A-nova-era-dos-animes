@@ -3,7 +3,6 @@ import { adicionarExperiencia } from './jornada.js';
 import { banco } from '../banco/cliente.js';
 import type { PrismaClient } from '../banco/gerado/client.js';
 import {
-  FORMAS_ASTRA,
   XP_MAXIMO,
   nivelPorExperiencia,
   validarCorAura,
@@ -22,16 +21,18 @@ export type BancoDeMascotes = PrismaClient;
 const PREFERENCIAS_PADRAO = { visivel: true, acompanhar: true, posicao: 'direita' } as const;
 
 export async function listarColecao(usuarioId: string, cliente: BancoDeMascotes = banco) {
-  const [mascotes, preferencia] = await Promise.all([
+  const [mascotes, preferencia, formas] = await Promise.all([
     cliente.companheiroMascote.findMany({
       where: { usuarioId },
       include: { especie: true, eventos: { orderBy: { criadoEm: 'desc' }, take: 20 } },
       orderBy: { criadoEm: 'asc' }
     }),
-    cliente.preferenciasMascote.findUnique({ where: { usuarioId } })
+    cliente.preferenciasMascote.findUnique({ where: { usuarioId } }),
+    cliente.formaMascote.findMany({ orderBy: { nivelMinimo: 'asc' } })
   ]);
   return {
     mascotes,
+    formas,
     equipado: mascotes.find((item) => item.equipado) ?? null,
     preferencias: preferencia ?? PREFERENCIAS_PADRAO
   };
@@ -139,7 +140,7 @@ export async function personalizarMascote(
     where: { id: companheiroId, usuarioId }
   });
   if (!pet) throw new Error('Companheiro não encontrado.');
-  const valida = FORMAS_ASTRA.find((item) => item.id === forma);
+  const valida = await cliente.formaMascote.findUnique({ where: { id: forma } });
   if (!valida || valida.nivelMinimo > nivelPorExperiencia(pet.experiencia)) {
     throw new Error('Esta forma evolutiva ainda não foi conquistada.');
   }

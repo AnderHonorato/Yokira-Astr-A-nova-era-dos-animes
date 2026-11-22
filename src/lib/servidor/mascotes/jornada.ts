@@ -1,72 +1,8 @@
 import { banco } from '../banco/cliente.js';
 import type { Prisma, PrismaClient } from '../banco/gerado/client.js';
-import {
-  FORMAS_ASTRA,
-  nivelPorExperiencia,
-  XP_EPISODIO_VALIDADO,
-  XP_MAXIMO
-} from '../../mascotes/regras.js';
+import { nivelPorExperiencia, XP_EPISODIO_VALIDADO, XP_MAXIMO } from '../../mascotes/regras.js';
 
 type Tx = Prisma.TransactionClient;
-
-export const DESAFIOS = [
-  {
-    chave: 'descoberta',
-    nome: 'Radar astral',
-    objetivo: 'Explore duas recomendações de Astra.',
-    meta: 2,
-    xp: 240,
-    premio: 'Medalha Explorador astral'
-  },
-  {
-    chave: 'encontro-lunar',
-    nome: 'Encontro lunar',
-    objetivo: 'Descubra três recomendações durante o festival de novembro.',
-    meta: 3,
-    xp: 360,
-    premio: 'Medalha Festival lunar'
-  },
-  {
-    chave: 'veterano',
-    nome: 'Guia dos companheiros',
-    objetivo: 'Alcance o nível de jornada 3, somando a experiência da coleção.',
-    meta: 3,
-    xp: 120,
-    premio: 'Título Guia dos companheiros'
-  },
-  {
-    chave: 'colecionador',
-    nome: 'Curadoria pessoal',
-    objetivo: 'Salve cinco títulos publicados.',
-    meta: 5,
-    xp: 250,
-    premio: 'Luna, companheira lunar'
-  },
-  {
-    chave: 'comunidade',
-    nome: 'Voz da comunidade',
-    objetivo: 'Avalie três títulos publicados.',
-    meta: 3,
-    xp: 180,
-    premio: 'Medalha Voz da comunidade'
-  },
-  {
-    chave: 'temporada',
-    nome: 'Até o último episódio',
-    objetivo: 'Assista a todos os episódios publicados de uma temporada.',
-    meta: 1,
-    xp: 650,
-    premio: 'Medalha Guardião da temporada'
-  },
-  {
-    chave: 'anime',
-    nome: 'Primeiro anime completo',
-    objetivo: 'Complete todas as temporadas publicadas de um título.',
-    meta: 1,
-    xp: 900,
-    premio: 'Título Cronista astral'
-  }
-] as const;
 
 export async function adicionarExperiencia(
   tx: Tx,
@@ -78,11 +14,15 @@ export async function adicionarExperiencia(
 ) {
   const ganho = Math.min(pontos, XP_MAXIMO - pet.experiencia);
   const experiencia = pet.experiencia + ganho;
-  const formas = FORMAS_ASTRA.filter(
-    (f) =>
-      f.nivelMinimo > nivelPorExperiencia(pet.experiencia) &&
-      f.nivelMinimo <= nivelPorExperiencia(experiencia)
-  );
+  const formas = await tx.formaMascote.findMany({
+    where: {
+      nivelMinimo: {
+        gt: nivelPorExperiencia(pet.experiencia),
+        lte: nivelPorExperiencia(experiencia)
+      }
+    },
+    orderBy: { nivelMinimo: 'asc' }
+  });
   await tx.eventoMascote.create({
     data: { companheiroId: pet.id, chave, descricao, pontos: ganho, tipo }
   });
@@ -181,7 +121,7 @@ export async function aferirReproducao(
   });
 }
 
-async function progressoDesafios(tx: Tx, usuarioId: string) {
+async function progressoDesafios(tx: Tx, usuarioId: string): Promise<Record<string, number>> {
   const [lista, avaliacoes, percursos] = await Promise.all([
     tx.itemLista.count({ where: { usuarioId, titulo: { situacao: 'PUBLICADO' } } }),
     tx.avaliacao.count({ where: { usuarioId, titulo: { situacao: 'PUBLICADO' } } }),
@@ -241,17 +181,18 @@ async function progressoDesafios(tx: Tx, usuarioId: string) {
 }
 
 export async function lerJornada(usuarioId: string, cliente: PrismaClient = banco) {
-  const [progresso, conquistas, pet] = await Promise.all([
+  const [progresso, conquistas, pet, definicoes] = await Promise.all([
     progressoDesafios(cliente, usuarioId),
     cliente.conquistaJornada.findMany({ where: { usuarioId } }),
     cliente.companheiroMascote.findFirst({
       where: { usuarioId, equipado: true },
       select: { especie: { select: { nome: true } } }
-    })
+    }),
+    cliente.definicaoMissao.findMany({ orderBy: { xp: 'asc' } })
   ]);
   return {
     companheiro: pet?.especie.nome,
-    missoes: DESAFIOS.map((m) => ({
+    missoes: definicoes.map((m) => ({
       ...m,
       atual: Math.min(m.meta, progresso[m.chave]),
       recebida: conquistas.some((c) => c.chave === m.chave)
@@ -264,14 +205,14 @@ export async function resgatarDesafio(
   chave: string,
   cliente: PrismaClient = banco
 ) {
-  const missao = DESAFIOS.find((m) => m.chave === chave);
+  const missao = await cliente.definicaoMissao.findUnique({ where: { chave } });
   if (!missao) throw new Error('Missão desconhecida.');
   return cliente.$transaction(async (tx) => {
     const pet = await tx.companheiroMascote.findFirst({ where: { usuarioId, equipado: true } });
     if (!pet) throw new Error('Equipe um companheiro para receber a experiência.');
     if (await tx.conquistaJornada.findUnique({ where: { usuarioId_chave: { usuarioId, chave } } }))
       return false;
-    if ((await progressoDesafios(tx, usuarioId))[missao.chave] < missao.meta)
+    if (((await progressoDesafios(tx, usuarioId))[missao.chave] ?? 0) < missao.meta)
       throw new Error('Objetivo ainda em andamento.');
     await tx.conquistaJornada.create({ data: { usuarioId, chave } });
     await adicionarExperiencia(tx, pet, 'jornada-' + chave, missao.nome, missao.xp, 'MISSAO');

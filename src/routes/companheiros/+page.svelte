@@ -1,6 +1,6 @@
 <script lang="ts">
   import './companheiros.css';
-  import { calcularProgressao, FORMAS_ASTRA, nivelPorExperiencia } from '$lib/mascotes/regras';
+  import { calcularProgressao, nivelPorExperiencia } from '$lib/mascotes/regras';
 
   export let data;
   export let form;
@@ -26,6 +26,7 @@
         descobertas no Yōkira.
       </p>
     </div>
+    <a href="/jornada" class="universo-link">Ver missões e recompensas</a>
     <a href="/catalogo" class="universo-link">Explorar animes <span aria-hidden="true">↗</span></a>
   </div>
 
@@ -85,6 +86,7 @@
               especie={companheiro.especieId}
               forma={companheiro.formaSelecionada}
               cor={companheiro.corAura}
+              formas={data.colecao.formas}
               {nivel}
             />
             {#if !companheiro.equipado}
@@ -123,7 +125,7 @@
               <span>5 FORMAS</span>
             </div>
             <ol class="universo-evolucao">
-              {#each FORMAS_ASTRA as forma (forma.id)}
+              {#each data.colecao.formas as forma (forma.id)}
                 <li
                   class:liberada={forma.nivelMinimo <= nivel}
                   class:selecionada={forma.id === companheiro.formaSelecionada}
@@ -158,7 +160,7 @@
               <label
                 >Forma desbloqueada
                 <select name="forma">
-                  {#each FORMAS_ASTRA as forma (forma.id)}
+                  {#each data.colecao.formas as forma (forma.id)}
                     <option
                       value={forma.id}
                       selected={companheiro.formaSelecionada === forma.id}

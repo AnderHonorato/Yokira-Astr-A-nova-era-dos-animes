@@ -264,8 +264,21 @@
   .constelacao {
     filter: drop-shadow(0 0 3px var(--luz));
   }
-  .dancar .animal { transform-origin: center bottom; animation: danca 1.2s ease-in-out infinite alternate; }
-  @keyframes danca { 0% { transform: rotate(-8deg) translateY(-4px); } 50% { transform: translateY(-15px); } 100% { transform: rotate(8deg) translateY(-4px); } }
+  .dancar .animal {
+    transform-origin: center bottom;
+    animation: danca 1.2s ease-in-out infinite alternate;
+  }
+  @keyframes danca {
+    0% {
+      transform: rotate(-8deg) translateY(-4px);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+    100% {
+      transform: rotate(8deg) translateY(-4px);
+    }
+  }
   @keyframes respirar {
     50% {
       transform: scale(1.008, 1.018);

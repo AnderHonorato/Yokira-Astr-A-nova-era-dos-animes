@@ -30,6 +30,18 @@
       href: '/biblioteca-magica'
     },
     { titulo: 'Seu companheiro', descricao: 'Evolua o Astra.', icone: '✺', href: '/companheiros' },
+    {
+      titulo: 'Salas Yokira',
+      descricao: 'Visite as salas do site original.',
+      icone: '◇',
+      href: 'https://yokira-2-ander.honoratoann.chatgpt.site/?p=salas'
+    },
+    {
+      titulo: 'Comunidade',
+      descricao: 'Encontre a comunidade original.',
+      icone: '◇',
+      href: 'https://yokira-2-ander.honoratoann.chatgpt.site/?p=comunidade'
+    },
     { titulo: 'Buscar animes', descricao: 'Descubra pelo nome.', icone: '⌕', href: '/buscar' },
     {
       titulo: 'Minha lista',

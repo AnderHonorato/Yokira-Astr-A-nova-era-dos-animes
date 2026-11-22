@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { FORMAS_ASTRA } from '$lib/mascotes/regras';
+  export let formas: { id: string; nome: string; nivelMinimo: number }[];
   import Palco3d from './palco-3d.svelte';
   let mostrar3d = false;
   import Guardiao from './guardiao-articulado.svelte';
@@ -27,7 +27,7 @@
     movimento = acao;
   }
   onMount(() => {
-    const ultimaForma = [...FORMAS_ASTRA].reverse().find((item) => item.nivelMinimo <= nivel)!;
+    const ultimaForma = [...formas].reverse().find((item) => item.nivelMinimo <= nivel)!;
     // Somente o aviso de evolução é local. O nível e a forma vêm da conta.
     try {
       const chave = 'yokira-evolucao-vista-' + id;
@@ -61,7 +61,7 @@
       ? nome + ' está feliz em te ver!'
       : celebracao || 'Toque em ' + nome + ' para interagir.'}</span
   >
-  <strong>{FORMAS_ASTRA.find((item) => item.id === forma)?.nome}</strong>
+  <strong>{formas.find((item) => item.id === forma)?.nome}</strong>
 </div>
 <button type="button" aria-pressed={mostrar3d} on:click={() => (mostrar3d = !mostrar3d)}
   >{mostrar3d ? 'Fechar modelo 3D' : 'Ver modelo 3D'}</button

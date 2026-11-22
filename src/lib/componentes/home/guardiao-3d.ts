@@ -142,7 +142,7 @@ export function montarGuardiao(
         : m === 'dormir'
           ? -0.23
           : 0;
-    grupo.rotation.z = m === 'dancar' ? Math.sin(t * 5) * .18 : 0;
+    grupo.rotation.z = m === 'dancar' ? Math.sin(t * 5) * 0.18 : 0;
     grupo.rotation.x = m === 'sentar' ? -0.25 : 0;
     cabeca.rotation.z = m === 'dormir' ? -0.35 : Math.sin(t * 1.3) * 0.05;
     patas.forEach(

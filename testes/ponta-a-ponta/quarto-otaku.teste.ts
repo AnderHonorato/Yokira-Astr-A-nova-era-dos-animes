@@ -19,7 +19,9 @@ test('o dono decora o quarto e controla o acesso de visitantes', async ({ page, 
   const detalhe = page.locator('details[open]');
   await detalhe.getByLabel('Rotação (graus)').fill('45');
   await detalhe.getByRole('button', { name: 'Salvar posição' }).click();
-  await expect(page.getByRole('status')).toContainText('Posição do objeto salva');
+  await expect(page.locator('.quarto').getByRole('status')).toContainText(
+    'Posição do objeto salva'
+  );
   await page.reload();
   await expect(page.getByRole('combobox', { name: 'Tema', exact: true })).toHaveValue('sakura');
   await page.locator('summary').filter({ hasText: 'Estante de mangás' }).click();
