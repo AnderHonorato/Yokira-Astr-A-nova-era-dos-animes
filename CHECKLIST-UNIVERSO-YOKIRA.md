@@ -12,9 +12,9 @@
 - [x] ✅ Mascote original Astra em WebP copiado localmente da referência aprovada.
 - [x] ✅ Novo esquema Prisma e migration aditiva para coleção, espécies, eventos de XP e preferências.
 - [x] ✅ Testes de unidade de progressão e integração de banco SQLite.
-- [ ] 🟡 Restauração da workflow original de testes GitHub Actions no novo repositório; confirmação de CI verde após alterações.
+- [x] ✅ Workflow original de verificações restaurado no GitHub Actions; CI da primeira entrega aprovado em 390px e 1440px.
 - [ ] ⚠️ Publicar hospedagem permanente com SQLite persistente: a conta Railway retornou _trial expired_ em tentativa anterior.
-- [ ] ⚠️ Acesso Wi-Fi pelo celular: necessita testar do aparelho. O endereço do PC pode mudar e o Windows recusou criar regra de firewall sem direitos administrativos.
+- [ ] 🟡 Regra restrita de Wi-Fi criada com autorização de administrador (TCP 4117, 192.168.1.0/24). Servidor responde HTTP 200 no PC; teste no celular ainda pendente.
 
 ## 1. Mascotes, desbloqueio e coleção
 
@@ -51,7 +51,8 @@
 - [x] ✅ Filtros reais de ano, nota, gênero, ordenação e fonte ativa.
 - [x] ✅ Cards com dados reais, navegação por toque/mouse/teclado e link para o título.
 - [x] ✅ Acesso alternativo ao catálogo convencional, sem impedir assistir normalmente.
-- [ ] 🟡 Testes E2E dedicados em celular e desktop, inclusive fontes ativas e filtros combinados.
+- [x] ✅ Playwright: visita ao Portal Astral em celular 390px e desktop 1440px, incluindo cards reais e prevenção de overflow.
+- [ ] ⏳ Ampliar testes dos filtros combinados e fontes ativas.
 - [ ] ⏳ Navegação por gestos avançados, missões vinculadas à exploração e fundo 3D opcional.
 
 ## 4. Biblioteca Mágica
@@ -60,7 +61,8 @@
 - [x] ✅ Livros com capa do catálogo, situação (quero ver/em andamento/concluído) e episódios concluídos.
 - [x] ✅ Pesquisa, filtros por situação e livro expansível com link para o anime.
 - [x] ✅ Alternativa à Minha Lista convencional (sem novo histórico paralelo).
-- [ ] 🟡 Testes E2E dedicados de sincronismo entre player, lista e biblioteca.
+- [x] ✅ Playwright: adicionar títulos à lista e confirmar sincronismo real com a Biblioteca Mágica.
+- [ ] ⏳ Cobrir também alteração do progresso ao assistir no player.
 - [ ] ⏳ Personalização de estantes, decoração e interação do mascote com livros.
 
 ## 5. Quarto Otaku
@@ -75,21 +77,22 @@
 
 - [x] ✅ Usabilidade de interface em 2D leve com animações CSS e `prefers-reduced-motion`.
 - [x] ✅ Sistema de conta, permissões e SQLite reais, não dados apenas em memória de navegador.
-- [ ] 🟡 Verificar CI final e os testes Playwright após integração de novas rotas.
+- [x] ✅ CI de primeira entrega passou (tipos, lint, unidade, integração e Playwright 390px/1440px).
+- [x] ✅ Mais 6 cenários Playwright locais de mascote, XP, lista e portal aprovados.
 - [ ] ⏳ Monitorar performance real (LCP, INP e CLS) no Android e corrigir regressões.
 - [ ] ⏳ Publicar hospedagem pública duradoura com backup e manutenção das migrações.
 - [ ] ⚠️ Validar URL pelo **Wi-Fi no próprio celular**; resposta HTTP 200 no PC, sozinha, não comprova acesso ao celular.
 
 ## Erros e limitações conhecidos
 
-| Tema           | Situação                                                                   | Próxima providência                                         |
-| -------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Git do Windows | Sem credenciais para `git push` direto                                     | Publicar pelas permissões do conector GitHub                |
-| GitHub Actions | Token temporário não pôde adicionar workflow original do outro repositório | Restaurar via conector GitHub autenticado                   |
-| Railway        | Hospedagem recusada por trial expirado                                     | Selecionar servidor com disco persistente                   |
-| Firewall Wi-Fi | Windows negou criação de regra TCP por falta de elevação                   | Autorizar porta LAN apenas em rede privada e testar celular |
-| Vídeos e XP    | Progresso recebido do player não é prova suficiente de visualização real   | Não liberar XP automático sem validação antiabuso           |
-| Animações 3D   | Arquivo GLB com rigging ainda não fornecido/validado                       | Usar mascote 2D original até obter malha adequada           |
+| Tema           | Situação                                                                 | Próxima providência                               |
+| -------------- | ------------------------------------------------------------------------ | ------------------------------------------------- |
+| Git do Windows | Sem credenciais para `git push` direto                                   | Publicar pelas permissões do conector GitHub      |
+| GitHub Actions | Resolvido: workflow restaurado pelo conector, CI aprovado                | Monitorar próximos commits                        |
+| Railway        | Hospedagem recusada por trial expirado                                   | Selecionar servidor com disco persistente         |
+| Firewall Wi-Fi | Resolvido no PC: regra Private para YokiraNode.exe/4117 e 192.168.1.0/24 | Confirmar no celular conectado ao mesmo roteador  |
+| Vídeos e XP    | Progresso recebido do player não é prova suficiente de visualização real | Não liberar XP automático sem validação antiabuso |
+| Animações 3D   | Arquivo GLB com rigging ainda não fornecido/validado                     | Usar mascote 2D original até obter malha adequada |
 
 ## Para acompanhar
 
