@@ -1,0 +1,32 @@
+name: Importar base original Yokira Astra
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/importar-base-yokira.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.repository == 'AnderHonorato/Yokira-Astr-A-nova-era-dos-animes'
+    steps:
+      - name: Obter historico do repositório novo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Importar base publica existente, sem apagar o historico novo
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "AnderHonorato"
+          git config user.email "200148189+AnderHonorato@users.noreply.github.com"
+          git remote add original https://github.com/AnderHonorato/Yokira-Astra.git
+          git fetch original feat/mascote-yokira-astra-20261122
+          git merge --allow-unrelated-histories -X theirs FETCH_HEAD -m "chore: importar base Yokira Astra com mascote e correcoes"
+          git push origin HEAD:main
