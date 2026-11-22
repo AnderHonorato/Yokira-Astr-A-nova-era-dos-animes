@@ -1,0 +1,98 @@
+# Yokira Astra — checklist de evolução e implantação
+
+> **Projeto de destino:** [Yokira — A nova era dos animes](https://github.com/AnderHonorato/Yokira-Astr-A-nova-era-dos-animes).  
+> **Base importada:** [AnderHonorato/Yokira-Astra](https://github.com/AnderHonorato/Yokira-Astra), incluindo o mascote e correções da branch `feat/mascote-yokira-astra-20261122`.  
+> **Atualizado em:** 22/11/2026. Este documento declara somente o que foi implementado ou testado; nenhuma tarefa é considerada concluída sem evidência.  
+> **Legenda:** ✅ concluído · 🟡 implementado, revisão/testes pendentes · ⏳ não implementado · ⚠️ bloqueado ou defeito.
+
+## 0. Cópia, integração e infraestrutura
+
+- [x] ✅ Repositório novo criado pelo proprietário e base real SvelteKit/TypeScript importada (440 arquivos).
+- [x] ✅ Cadastro de animes, player, perfis, contas, progresso, lista, ranking, histórico e área administrativa originais preservados.
+- [x] ✅ Mascote original Astra em WebP copiado localmente da referência aprovada.
+- [x] ✅ Novo esquema Prisma e migration aditiva para coleção, espécies, eventos de XP e preferências.
+- [x] ✅ Testes de unidade de progressão e integração de banco SQLite.
+- [ ] 🟡 Restauração da workflow original de testes GitHub Actions no novo repositório; confirmação de CI verde após alterações.
+- [ ] ⚠️ Publicar hospedagem permanente com SQLite persistente: a conta Railway retornou _trial expired_ em tentativa anterior.
+- [ ] ⚠️ Acesso Wi-Fi pelo celular: necessita testar do aparelho. O endereço do PC pode mudar e o Windows recusou criar regra de firewall sem direitos administrativos.
+
+## 1. Mascotes, desbloqueio e coleção
+
+- [x] ✅ Usuário inicia sem mascote equipado ou desbloqueado.
+- [x] ✅ Missão introdutória gratuita: desbloquear Astra (uma única instância por usuário).
+- [x] ✅ Coleção pessoal e mascote equipado, isolados por usuário.
+- [x] ✅ Equipar um mascote existente com transação e verificação de propriedade.
+- [x] ✅ Nível e XP de cada mascote persistidos individualmente.
+- [x] ✅ Cinco formas e limiares (1/10/25/50/80), incluindo escolha de forma anterior conquistada.
+- [x] ✅ Formas distintas com efeitos 2D progressivos (aura, anel astral, constelações e brilho), sem fingir que existe malha 3D.
+- [x] ✅ Árvore de evolução, barra de XP, prévia textual e estados de bloqueio.
+- [x] ✅ Personalização persistente de aura e formas, com restrições no servidor.
+- [x] ✅ Reações de salto, respiração e descanso ao toque/click.
+- [x] ✅ Preferências persistentes de visibilidade, acompanhamento e posição.
+- [x] ✅ Histórico dos eventos de XP, persistido e limitado à conta.
+- [ ] ⏳ Animações articuladas de corrida, caminhada, piscar, mover orelhas/cauda e sequência cinematográfica de evolução.
+- [ ] ⏳ Espécies adicionais, variantes gráficas exclusivas, inventário de mascotes e sistemas de desbloqueio além do Astra.
+- [ ] ⏳ Acompanhamento do mascote em todas as telas respeitando preferências sem cobrir player.
+- [ ] ⏳ Assistente de IA opcional conectado exclusivamente a títulos do catálogo.
+
+## 2. Jornada Yokira e segurança das recompensas
+
+- [x] ✅ Missão _Explorar três gêneros_ usa títulos publicados e a Minha Lista real.
+- [x] ✅ Recompensa de 420 XP apenas uma vez por companheiro, protegida por índice único e transação.
+- [x] ✅ Formas, cores e recompensas não podem ser forjadas por parâmetros do formulário.
+- [x] ✅ Isolamento entre contas, duplicidade, missão incompleta e cores bloqueadas cobertos por testes.
+- [ ] ⏳ XP por assistir episódios **ainda não habilitado**: implementar verificação server-side do tempo válido de reprodução com anticlique/antibot e idempotência por episódio.
+- [ ] ⏳ Missões por temporada, eventos sazonais, comunidade, coleções e medalhas.
+- [ ] ⏳ Inventário universal de itens e sistema de recompensas sazonais.
+
+## 3. Portal Astral
+
+- [x] ✅ Nova rota `/portal-astral` com cenário 2D por gênero conectado ao catálogo publicado.
+- [x] ✅ Filtros reais de ano, nota, gênero, ordenação e fonte ativa.
+- [x] ✅ Cards com dados reais, navegação por toque/mouse/teclado e link para o título.
+- [x] ✅ Acesso alternativo ao catálogo convencional, sem impedir assistir normalmente.
+- [ ] 🟡 Testes E2E dedicados em celular e desktop, inclusive fontes ativas e filtros combinados.
+- [ ] ⏳ Navegação por gestos avançados, missões vinculadas à exploração e fundo 3D opcional.
+
+## 4. Biblioteca Mágica
+
+- [x] ✅ Nova rota `/biblioteca-magica` lendo `ItemLista` e `Progresso` existentes.
+- [x] ✅ Livros com capa do catálogo, situação (quero ver/em andamento/concluído) e episódios concluídos.
+- [x] ✅ Pesquisa, filtros por situação e livro expansível com link para o anime.
+- [x] ✅ Alternativa à Minha Lista convencional (sem novo histórico paralelo).
+- [ ] 🟡 Testes E2E dedicados de sincronismo entre player, lista e biblioteca.
+- [ ] ⏳ Personalização de estantes, decoração e interação do mascote com livros.
+
+## 5. Quarto Otaku
+
+- [ ] ⏳ Implementar modelo Prisma de inventário/decorações e layout por usuário.
+- [ ] ⏳ Criar ambiente pessoal 2D editável com arrastar/rotacionar e salvar em transações.
+- [ ] ⏳ Coleções de móveis, posters reais e objetos desbloqueáveis.
+- [ ] ⏳ Visitas a quartos públicos com consentimento e permissões.
+- [ ] ⏳ Suporte 3D opcional, rigging e malhas otimizadas **apenas quando o modelo Tripo AI estiver disponível e validado**.
+
+## 6. Qualidade, acessibilidade e entrega
+
+- [x] ✅ Usabilidade de interface em 2D leve com animações CSS e `prefers-reduced-motion`.
+- [x] ✅ Sistema de conta, permissões e SQLite reais, não dados apenas em memória de navegador.
+- [ ] 🟡 Verificar CI final e os testes Playwright após integração de novas rotas.
+- [ ] ⏳ Monitorar performance real (LCP, INP e CLS) no Android e corrigir regressões.
+- [ ] ⏳ Publicar hospedagem pública duradoura com backup e manutenção das migrações.
+- [ ] ⚠️ Validar URL pelo **Wi-Fi no próprio celular**; resposta HTTP 200 no PC, sozinha, não comprova acesso ao celular.
+
+## Erros e limitações conhecidos
+
+| Tema           | Situação                                                                   | Próxima providência                                         |
+| -------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Git do Windows | Sem credenciais para `git push` direto                                     | Publicar pelas permissões do conector GitHub                |
+| GitHub Actions | Token temporário não pôde adicionar workflow original do outro repositório | Restaurar via conector GitHub autenticado                   |
+| Railway        | Hospedagem recusada por trial expirado                                     | Selecionar servidor com disco persistente                   |
+| Firewall Wi-Fi | Windows negou criação de regra TCP por falta de elevação                   | Autorizar porta LAN apenas em rede privada e testar celular |
+| Vídeos e XP    | Progresso recebido do player não é prova suficiente de visualização real   | Não liberar XP automático sem validação antiabuso           |
+| Animações 3D   | Arquivo GLB com rigging ainda não fornecido/validado                       | Usar mascote 2D original até obter malha adequada           |
+
+## Para acompanhar
+
+- Código: [repositório novo](https://github.com/AnderHonorato/Yokira-Astr-A-nova-era-dos-animes)
+- Esta lista: `CHECKLIST-UNIVERSO-YOKIRA.md` na raiz
+- Rotas a verificar: `/companheiros`, `/portal-astral`, `/biblioteca-magica`

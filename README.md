@@ -4,6 +4,9 @@
 
 # Yōkira Astra
 
+**Nova era:** [Checklist completo de implementação, pendências, testes e erros](CHECKLIST-UNIVERSO-YOKIRA.md).  
+**Novas seções:** [Companheiros](src/routes/companheiros) · [Portal Astral](src/routes/portal-astral) · [Biblioteca Mágica](src/routes/biblioteca-magica).
+
 Plataforma de catálogo e streaming de animes, em português, feita com SvelteKit,
 Prisma, SQLite e FFmpeg.
 

@@ -24,6 +24,9 @@
     >
     <h2>Esse é o Astra.</h2>
     <p>Um guardião cósmico com personalidade própria para acompanhar suas descobertas.</p>
+    <a class="astra-colecao" href="/companheiros"
+      >Minha coleção e evolução <span aria-hidden="true">↗</span></a
+    >
     {#if aberto}
       <p id="astra-conversa" class="astra-resposta">{RESPOSTA_ASTRA}</p>
       <div class="astra-atalhos" aria-label="Caminhos sugeridos por Astra">

@@ -65,6 +65,8 @@ model Usuario {
   registros         RegistroAdministrativo[]
   confirmacoes      TokenConfirmacao[]
   visualizacoes     Visualizacao[]
+  companheiros      CompanheiroMascote[]
+  preferenciasMascote PreferenciasMascote?
 
   @@index([papel])
 }
@@ -425,4 +427,55 @@ model RegistroAdministrativo {
   usuario Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
 
   @@index([criadoEm])
+}
+
+
+// Núcleo do universo de mascotes: progresso por usuário e por espécie, nunca em localStorage.
+model EspecieMascote {
+  id             String @id
+  nome           String
+  descricao      String
+  imagemUrl      String
+  ativo          Boolean @default(true)
+  companheiros   CompanheiroMascote[]
+}
+
+model CompanheiroMascote {
+  id             String @id @default(cuid())
+  usuarioId      String
+  especieId      String
+  experiencia    Int @default(0)
+  equipado       Boolean @default(false)
+  formaSelecionada String @default("despertar")
+  corAura        String @default("violeta")
+  criadoEm       DateTime @default(now())
+  atualizadoEm   DateTime @updatedAt
+
+  usuario        Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  especie        EspecieMascote @relation(fields: [especieId], references: [id], onDelete: Restrict)
+  eventos        EventoMascote[]
+
+  @@unique([usuarioId, especieId])
+  @@index([usuarioId, equipado])
+}
+
+model EventoMascote {
+  id             String @id @default(cuid())
+  companheiroId  String
+  chave          String
+  tipo           String
+  descricao      String
+  pontos         Int @default(0)
+  criadoEm       DateTime @default(now())
+  companheiro    CompanheiroMascote @relation(fields: [companheiroId], references: [id], onDelete: Cascade)
+  @@unique([companheiroId, chave])
+  @@index([companheiroId, criadoEm])
+}
+
+model PreferenciasMascote {
+  usuarioId      String @id
+  visivel        Boolean @default(true)
+  acompanhar     Boolean @default(true)
+  posicao        String @default("direita")
+  usuario        Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }
