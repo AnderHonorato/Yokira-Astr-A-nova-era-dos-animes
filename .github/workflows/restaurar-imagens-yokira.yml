@@ -1,0 +1,42 @@
+name: Restaurar imagens do Yokira atual
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/restaurar-imagens-yokira.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  imagens:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - name: Recuperar somente arte do repositorio atual
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --branch main-ChatGPT https://github.com/AnderHonorato/Yokira-2.0.git /tmp/yokira-arte
+          mkdir -p static/arte
+          cp -r /tmp/yokira-arte/versao-sites/public/arte/. static/arte/
+          mkdir -p static/arte/cenarios static/arte/banners
+          origem="https://yokira-2-ander.honoratoann.chatgpt.site"
+          for imagem in arte/cenarios/01-sakura-luar.webp arte/banners/one-piece-cenario.webp arte/banners/one-piece-personagem.webp; do
+            if ! curl --fail --silent --show-error --location --max-time 30 --retry 2 "$origem/$imagem" -o "static/$imagem"; then
+              echo "::warning::Nao foi possivel baixar $imagem do site atual."
+              rm -f "static/$imagem"
+            fi
+          done
+          # Fonte de referencia é do próprio usuário. Nunca importar credenciais ou conteúdo de vídeo.
+          find static/arte -type f | wc -l
+          git config user.name "Yokira CI"
+          git config user.email "200148189+AnderHonorato@users.noreply.github.com"
+          git add static/arte
+          if ! git diff --cached --quiet; then
+            git commit -m "assets: restaurar 20 capas, banners e cenarios do Yokira atual"
+            git push origin HEAD:main
+          fi
