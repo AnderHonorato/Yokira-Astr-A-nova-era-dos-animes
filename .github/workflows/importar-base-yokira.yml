@@ -15,12 +15,12 @@ jobs:
     timeout-minutes: 10
     if: github.repository == 'AnderHonorato/Yokira-Astr-A-nova-era-dos-animes'
     steps:
-      - name: Obter historico do repositório novo
+      - name: Checkout do repositório novo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
-      - name: Importar base publica existente, sem apagar o historico novo
+      - name: Importar arquivos completos sem sobrescrever o histórico
         shell: bash
         run: |
           set -euo pipefail
@@ -28,5 +28,10 @@ jobs:
           git config user.email "200148189+AnderHonorato@users.noreply.github.com"
           git remote add original https://github.com/AnderHonorato/Yokira-Astra.git
           git fetch original feat/mascote-yokira-astra-20261122
-          git merge --allow-unrelated-histories -X theirs FETCH_HEAD -m "chore: importar base Yokira Astra com mascote e correcoes"
+          git merge --squash --allow-unrelated-histories -X theirs FETCH_HEAD
+          # O token do GitHub Actions não pode criar workflows de outro repositório.
+          # O workflow original será restaurado pelo conector com acesso autorizado.
+          git rm --cached -f .github/workflows/verificacoes.yml
+          rm -f .github/workflows/verificacoes.yml
+          git commit -m "chore: importar versão completa do Yokira Astra para nova era"
           git push origin HEAD:main
