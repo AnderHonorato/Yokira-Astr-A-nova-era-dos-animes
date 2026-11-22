@@ -110,6 +110,9 @@
 - [x] ✅ Seed padrão importa títulos originais, preserva contas e esconde apenas títulos de demonstração do catálogo público (não apaga os registros).
 - [x] ✅ Notas editoriais do catálogo de referência distinguíveis das avaliações reais da comunidade.
 - [x] ✅ A leitura integral dos editoriais abre em `/editorial/[id]`.
-- [ ] 🟡 Comparar screenshots e validar todas as seções em 390px e 1440px após a última atualização.
+- [x] ✅ Comparada a home do site atual e do novo em desktop 1440px e celular 390px, com capturas reais no PC e melhorias aplicadas.
+- [x] ✅ Mobile: cabeçalho extra removido, cinco botões inferiores (Início, Acervo, Buscar, Meu perfil, Mais), menu de rotas reais, cenário compacto e ranking em duas colunas.
+- [x] ✅ Testes de UI da home: 5 cenários Playwright aprovados (1 ignorado por ser exclusivo de celular), imagens reais carregadas e sem rolagem horizontal.
+- [ ] ⏳ Igualar os demais componentes além da home: chat global, agenda, comunidade, amizades, salas, jogos e player do site publicado ainda exigem migração.
 - [ ] ⏳ Paridade total de comunidade, amizades, salas, jogos e agenda: existem no site publicado anterior, mas não foram portados integralmente para o backend SvelteKit atual.
 - [ ] ⏳ Fontes de episódios licenciados: importar somente com autorização; capas e metadados não equivalem a vídeos disponíveis.
