@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('home recupera identidade, ranking e conteúdo original com capas reais', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Acervo de animes' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Acervo de animes', level: 1 })).toBeVisible();
   await expect(page.getByText('20 títulos disponíveis para explorar')).toBeVisible();
   await expect(page.locator('.yka-melhores li')).toHaveCount(4);
   await expect(page.getByRole('heading', { name: 'One Piece' })).toBeVisible();
