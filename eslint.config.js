@@ -42,7 +42,10 @@ export default [
       'test-results/',
       'prisma/gerado/',
       // A aplicação React original tem ESLint e dependências próprios.
-      'versao-sites/'
+      'versao-sites/',
+      // Artefatos locais de diagnóstico, scripts temporários e segredos.
+      '.runtime/',
+      '.local/'
     ]
   }
 ];
