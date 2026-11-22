@@ -31,6 +31,17 @@ test('Astra desbloqueia por usuário, XP não duplica e biblioteca sincroniza li
   await page.getByRole('button', { name: /Interagir com Astra/ }).click();
   await expect(page.getByText('Astra está feliz em te ver!')).toBeVisible();
 
+  await page.getByRole('button', { name: 'Ver modelo 3D' }).click();
+  const modelo = page.locator('canvas[aria-label*="tridimensional"]');
+  await expect(modelo).toBeVisible();
+  await expect.poll(() => modelo.evaluate(el => (el as HTMLCanvasElement).width)).toBeGreaterThan(0);
+  await page.getByRole('button', { name: 'Fechar modelo 3D' }).click();
+
+  await page.goto('/assistente?q=piratas');
+  await page.getByRole('button', { name: 'Explorar com o mascote' }).first().click();
+  await expect(page).toHaveURL(/\/titulo\//);
+  await page.goto('/jornada');
+  await expect(page.locator('article').filter({hasText:'Radar astral'})).toContainText('1 / 2');
   const catalogo = await (await page.request.get('/api/catalogo/completo')).json();
   const salvos: string[] = [];
   for (const genero of catalogo.generos) {

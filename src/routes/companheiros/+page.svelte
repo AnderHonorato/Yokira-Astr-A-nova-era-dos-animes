@@ -4,7 +4,8 @@
 
   export let data;
   export let form;
-  let reacao: 'calmo' | 'animado' | 'descansando' = 'calmo';
+  import PalcoCompanheiro from '$componentes/home/palco-companheiro.svelte';
+  import Guardiao from '$componentes/home/guardiao-articulado.svelte';
 </script>
 
 <svelte:head>
@@ -78,45 +79,14 @@
               >
               <span class="universo-indicador">NÍVEL {nivel}</span>
             </div>
-            <button
-              type="button"
-              class="universo-personagem"
-              class:universo-saltando={reacao === 'animado'}
-              class:universo-descansando={reacao === 'descansando'}
-              class:universo-guardiao={nivel >= 10 && companheiro.formaSelecionada !== 'despertar'}
-              class:universo-astral={nivel >= 25 &&
-                !['despertar', 'guardiao'].includes(companheiro.formaSelecionada)}
-              class:universo-celestial={nivel >= 50 &&
-                ['celestial', 'lendaria'].includes(companheiro.formaSelecionada)}
-              class:universo-lendaria={nivel >= 80 && companheiro.formaSelecionada === 'lendaria'}
-              class:universo-azul={companheiro.corAura === 'azul'}
-              class:universo-rosa={companheiro.corAura === 'rosa'}
-              on:click={() => (reacao = reacao === 'animado' ? 'descansando' : 'animado')}
-              aria-label="Interagir com Astra: tocar para fazê-lo saltar ou descansar"
-            >
-              <span class="universo-brilho" aria-hidden="true"></span>
-              <span class="universo-anel" aria-hidden="true"></span>
-              <span class="universo-constelacoes" aria-hidden="true">✦ ✧ ✦</span>
-              <img
-                src={companheiro.especie.imagemUrl}
-                alt="Astra, mascote original com marcas astrais e cauda volumosa"
-                width="380"
-                height="380"
-                draggable="false"
-              />
-            </button>
-            <div class="universo-legenda-palco">
-              <span
-                >{reacao === 'animado'
-                  ? 'Astra está feliz em te ver!'
-                  : reacao === 'descansando'
-                    ? 'Astra está descansando.'
-                    : 'Toque em Astra para interagir.'}</span
-              ><strong
-                >{FORMAS_ASTRA.find((item) => item.id === companheiro.formaSelecionada)
-                  ?.nome}</strong
-              >
-            </div>
+            <PalcoCompanheiro
+              id={companheiro.id}
+              nome={companheiro.especie.nome}
+              especie={companheiro.especieId}
+              forma={companheiro.formaSelecionada}
+              cor={companheiro.corAura}
+              {nivel}
+            />
             {#if !companheiro.equipado}
               <form method="POST" action="?/equipar">
                 <input type="hidden" name="companheiroId" value={companheiro.id} /><button
@@ -159,7 +129,22 @@
                   class:selecionada={forma.id === companheiro.formaSelecionada}
                 >
                   <span class="universo-no">{forma.nivelMinimo <= nivel ? '✦' : '◇'}</span>
-                  <div><strong>{forma.nome}</strong><small>{forma.detalhe}</small></div>
+                  <details class="previa-forma">
+                    <summary>{forma.nome}</summary>
+                    <div class="modelo-previa">
+                      <Guardiao
+                        id={companheiro.id + '-' + forma.id}
+                        forma={forma.id}
+                        especie={companheiro.especieId}
+                        cor={companheiro.corAura}
+                      />
+                    </div>
+                    <small
+                      >{forma.detalhe} · {forma.nivelMinimo <= nivel
+                        ? 'Conquistada'
+                        : 'Prévia da próxima evolução'}</small
+                    >
+                  </details>
                   <span class="universo-meta">NV. {forma.nivelMinimo}</span>
                 </li>
               {/each}
@@ -226,7 +211,7 @@
               >
             </form>
           {/if}
-          <a href="/minha-lista">Ver Minha Lista ↗</a>
+          <a href="/minha-lista">Ver Minha Lista ↗</a> <a href="/jornada">Abrir Jornada Yokira ↗</a>
         </section>
         <section class="universo-cartao">
           <span class="universo-selo">PREFERÊNCIAS</span>
@@ -262,7 +247,7 @@
         <section class="universo-cartao universo-historico">
           <div class="universo-subtitulo">
             <h2>Histórico do guardião</h2>
-            <span>EVENTOS VALIDOS</span>
+            <span>EVENTOS DA CONTA</span>
           </div>
           {#if data.colecao.equipado.eventos.length === 0}<p>
               Seu histórico começa após a primeira missão concluída.

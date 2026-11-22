@@ -89,7 +89,10 @@
     estado = novo;
     agendador.aoAtualizarTempo(novo.atual);
     if (parou) agendador.gravarAgora(novo.atual);
-    if (comecou) contarVisualizacao();
+    if (comecou) {
+      agendador.gravarAgora(novo.atual);
+      contarVisualizacao();
+    }
     ocultador.travar(!novo.tocando);
   }
 

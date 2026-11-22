@@ -311,3 +311,63 @@
     transform: none;
   }
 }
+
+.portal-arte {
+  overflow: hidden;
+  isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+  min-height: 235px;
+}
+.portal-arte img.portal-paisagem {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 32%;
+  opacity: 0.48;
+  z-index: -2;
+  filter: saturate(0.65);
+  mask-image: linear-gradient(90deg, transparent, #000 44%);
+  animation: none;
+}
+.portal-arte::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #100d19, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+.portal-companheiro {
+  width: min(68%, 230px);
+  position: relative;
+  align-self: end;
+  margin-bottom: 40px;
+  justify-self: end;
+  margin-inline: 10px;
+}
+.portal-arte.esquerda .portal-companheiro {
+  justify-self: start;
+}
+.portal-travessia {
+  position: absolute;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-radius: 30px;
+  background: #100c19dd;
+  color: #f0e2ff;
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+}
+.portal-travessia a {
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  width: 42px;
+  height: 42px;
+  color: inherit;
+}

@@ -2,6 +2,7 @@
 // Grava onde o usuario parou. Chamado a cada 15s pelo player, nao a cada segundo.
 
 import { json, error } from '@sveltejs/kit';
+import { aferirReproducao } from '$servidor/mascotes/jornada';
 import { salvarProgresso } from '$servidor/banco/progresso';
 import { validarProgresso } from '$lib/validacoes/lista';
 import type { RequestHandler } from './$types';
@@ -13,5 +14,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
   const registro = await salvarProgresso(locals.usuario.id, dados.episodioId, dados.segundos);
   if (!registro) throw error(404, 'Episódio não encontrado.');
 
+  await aferirReproducao(locals.usuario.id, dados.episodioId, dados.segundos);
   return json({ segundos: registro.segundos, concluido: registro.concluido });
 };

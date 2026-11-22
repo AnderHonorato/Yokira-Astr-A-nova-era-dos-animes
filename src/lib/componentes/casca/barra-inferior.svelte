@@ -91,6 +91,9 @@
     <a href="/biblioteca-magica" on:click={() => (maisAberto = false)}>Biblioteca Mágica</a>
     <a href="/companheiros" on:click={() => (maisAberto = false)}>Companheiros</a>
     <a href="/novidades" on:click={() => (maisAberto = false)}>Novidades</a>
+    <a href="/jornada" on:click={() => (maisAberto = false)}>Jornada</a>
+    <a href="/quarto-otaku" on:click={() => (maisAberto = false)}>Quarto Otaku</a>
+    <a href="/assistente" on:click={() => (maisAberto = false)}>Assistente Astra</a>
     <a href="/minha-lista" on:click={() => (maisAberto = false)}>Minha Lista</a>
     <a href="/generos" on:click={() => (maisAberto = false)}>Gêneros</a>
     {#if podeAcessarPainel}<a href="/admin" on:click={() => (maisAberto = false)}

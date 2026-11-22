@@ -1,4 +1,5 @@
 // Persistência do companheiro por conta. Nunca aceita XP vindo de formulários ou API pública.
+import { adicionarExperiencia } from './jornada.js';
 import { banco } from '../banco/cliente.js';
 import type { PrismaClient } from '../banco/gerado/client.js';
 import {
@@ -83,8 +84,8 @@ export async function concederMissaoGeneros(
       });
       if (!mascote) throw new Error('Mascote inválido para esta conta.');
 
-      const concedida = await tx.eventoMascote.findUnique({
-        where: { companheiroId_chave: { companheiroId, chave: MISSAO_GENEROS.chave } }
+      const concedida = await tx.eventoMascote.findFirst({
+        where: { companheiro: { usuarioId }, chave: MISSAO_GENEROS.chave }
       });
       if (concedida) return { ganhou: false, experiencia: mascote.experiencia };
 
@@ -103,20 +104,15 @@ export async function concederMissaoGeneros(
       if (mascote.experiencia + MISSAO_GENEROS.experiencia > XP_MAXIMO) {
         throw new Error('Experiência máxima atingida.');
       }
-      await tx.eventoMascote.create({
-        data: {
-          companheiroId,
-          chave: MISSAO_GENEROS.chave,
-          tipo: 'MISSAO',
-          descricao: MISSAO_GENEROS.titulo,
-          pontos: MISSAO_GENEROS.experiencia
-        }
-      });
-      const atualizado = await tx.companheiroMascote.update({
-        where: { id: companheiroId },
-        data: { experiencia: { increment: MISSAO_GENEROS.experiencia } }
-      });
-      return { ganhou: true, experiencia: atualizado.experiencia };
+      const experiencia = await adicionarExperiencia(
+        tx,
+        mascote,
+        MISSAO_GENEROS.chave,
+        MISSAO_GENEROS.titulo,
+        MISSAO_GENEROS.experiencia,
+        'MISSAO'
+      );
+      return { ganhou: true, experiencia };
     });
   try {
     return await executar();
@@ -148,7 +144,7 @@ export async function personalizarMascote(
     throw new Error('Esta forma evolutiva ainda não foi conquistada.');
   }
   const corAura = validarCorAura(cor);
-  if (corAura === 'azul') {
+  if (corAura === 'azul' && pet.especieId !== 'luna') {
     const evento = await cliente.eventoMascote.findUnique({
       where: { companheiroId_chave: { companheiroId, chave: MISSAO_GENEROS.chave } }
     });

@@ -44,11 +44,11 @@ export function validarCorAura(valor: unknown): CorAura {
 }
 
 const XP_BASE = 40;
-export const XP_EPISODIO_VALIDADO = 40;
+export const XP_EPISODIO_VALIDADO = 200;
 export const XP_MAXIMO = 2_000_000_000;
 
 export function experienciaParaNivel(nivel: number): number {
-  if (!Number.isInteger(nivel) || nivel < 1 || nivel > 9_000) throw new Error('Nível inválido.');
+  if (!Number.isInteger(nivel) || nivel < 1 || nivel > 10_002) throw new Error('Nível inválido.');
   return (XP_BASE * nivel * (nivel - 1)) / 2;
 }
 

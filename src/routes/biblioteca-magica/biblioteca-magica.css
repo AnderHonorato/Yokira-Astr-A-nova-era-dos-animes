@@ -249,3 +249,56 @@
     transform: none;
   }
 }
+
+.biblioteca {
+  --prateleira: #503b5a;
+  --prateleira-borda: #9676a6;
+}
+.biblioteca[data-tema='cedro'] {
+  --prateleira: #563a31;
+  --prateleira-borda: #ba936b;
+}
+.biblioteca[data-tema='lunar'] {
+  --prateleira: #394961;
+  --prateleira-borda: #879fb9;
+}
+.biblioteca-estante {
+  background: linear-gradient(180deg, transparent, var(--prateleira));
+  border-bottom: 5px solid var(--prateleira-borda);
+}
+.biblioteca-tema,
+.biblioteca-tema label {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+}
+.biblioteca-tema {
+  margin: 0 0 1.5rem;
+}
+.biblioteca-tema select,
+.biblioteca-tema button {
+  font: inherit;
+  min-height: 40px;
+  border-radius: 8px;
+  padding: 6px 12px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda);
+}
+.nome-estante {
+  margin: 1.7rem 0 0.6rem;
+  font-size: 1.15rem;
+}
+.nome-estante small {
+  font-size: 0.75rem;
+  color: var(--cor-texto-secundario);
+}
+.leitor {
+  width: 92px;
+  margin-inline-start: auto;
+}
+.leitor.esquerda {
+  margin-inline: 0 auto;
+}

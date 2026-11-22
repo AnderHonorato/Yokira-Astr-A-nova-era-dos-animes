@@ -1,14 +1,19 @@
 import { banco } from '$servidor/banco/cliente';
 import { listarMinhaLista } from '$servidor/banco/lista';
-import type { PageServerLoad } from './$types';
+import { fail } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, setHeaders }) => {
   setHeaders({ 'cache-control': 'private, no-store' });
   if (!locals.usuario) return { precisaEntrar: true, livros: [] };
   const usuarioId = locals.usuario.id;
-  const cartoes = await listarMinhaLista(usuarioId);
+  const [cartoes, preferencias] = await Promise.all([
+    listarMinhaLista(usuarioId),
+    banco.preferenciasMascote.findUnique({ where: { usuarioId }, select: { temaEstante: true } })
+  ]);
+  const temaEstante = preferencias?.temaEstante ?? 'ametista';
   const ids = cartoes.map((item) => item.id);
-  if (!ids.length) return { precisaEntrar: false, livros: [] };
+  if (!ids.length) return { precisaEntrar: false, temaEstante, livros: [] };
   const titulos = await banco.titulo.findMany({
     where: { id: { in: ids } },
     select: { id: true, temporadas: { select: { episodios: { select: { id: true } } } } }
@@ -44,5 +49,22 @@ export const load: PageServerLoad = async ({ locals, setHeaders }) => {
       episodiosTotal: contagem.total
     };
   });
-  return { precisaEntrar: false, livros };
+  return { precisaEntrar: false, temaEstante, livros };
 };
+
+export const actions = {
+  estante: async ({ locals, request }) => {
+    if (!locals.usuario) return fail(401, { recado: 'Entre para salvar sua estante.' });
+    const temaEstante = (await request.formData()).get('tema');
+    if (typeof temaEstante !== 'string' || !['ametista', 'cedro', 'lunar'].includes(temaEstante)) {
+      return fail(400, { recado: 'Escolha um dos temas disponíveis.' });
+    }
+    const usuarioId = locals.usuario.id;
+    await banco.preferenciasMascote.upsert({
+      where: { usuarioId },
+      create: { usuarioId, temaEstante },
+      update: { temaEstante }
+    });
+    return { recado: 'Tema da estante salvo.' };
+  }
+} satisfies Actions;

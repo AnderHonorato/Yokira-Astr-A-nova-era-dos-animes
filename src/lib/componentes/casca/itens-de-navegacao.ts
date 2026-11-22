@@ -13,6 +13,9 @@ export const ITENS_DE_NAVEGACAO: ItemDeNavegacao[] = [
   { href: '/portal-astral', rotulo: 'Portal Astral' },
   { href: '/biblioteca-magica', rotulo: 'Biblioteca' },
   { href: '/companheiros', rotulo: 'Companheiros' },
+  { href: '/jornada', rotulo: 'Jornada' },
+  { href: '/quarto-otaku', rotulo: 'Quarto Otaku' },
+  { href: '/assistente', rotulo: 'Assistente' },
   { href: '/novidades', rotulo: 'Novidades' },
   { href: '/minha-lista', rotulo: 'Minha Lista' }
 ];

@@ -60,5 +60,5 @@ test('minha lista persiste depois de recarregar', async ({ page }) => {
 test('visitante sem conta ve o convite para entrar', async ({ page }) => {
   await page.goto('/minha-lista');
   // exact: o avatar do cabecalho tambem aponta pra /entrar.
-  await expect(page.getByRole('link', { name: 'Entrar', exact: true })).toBeVisible();
+  await expect(page.locator('main').getByRole('link', { name: 'Entrar', exact: true })).toBeVisible();
 });

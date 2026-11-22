@@ -41,6 +41,12 @@
     <a href="/entrar">Entre na sua conta</a> para ver as opções de conta, sessões e dados.
   </p>
 {:else}
+  {#if data.conquistas.length}
+    <h2 class="config-secao">Conquistas da Jornada</h2>
+    <ul>
+      {#each data.conquistas as conquista (conquista)}<li>{conquista}</li>{/each}
+    </ul>
+  {/if}
   <h2 class="config-secao">Conta</h2>
   <p class="config-subtitulo">Você tem {data.sessoesAtivas} sessão(ões) ativa(s) nesta conta.</p>
 {/if}

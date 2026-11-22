@@ -10,14 +10,11 @@
 // O DATABASE_URL é apontado para o banco temporário ANTES de importar os módulos: o
 // cliente do Prisma é um singleton lido na primeira importação.
 
-import { execFileSync } from 'node:child_process';
+import { rodarPrisma } from './preparar-banco';
 import { mkdtempSync, rmSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-
-const CLI_DO_PRISMA = createRequire(import.meta.url).resolve('prisma/build/index.js');
 
 let pasta = '';
 let banco: (typeof import('../../src/lib/servidor/banco/cliente'))['banco'];
@@ -40,10 +37,7 @@ async function criarArquivo(paraEpisodio = episodioId) {
 beforeAll(async () => {
   pasta = mkdtempSync(join(tmpdir(), 'yokira-fila-'));
   const url = `file:${join(pasta, 'teste.db')}`;
-  execFileSync(process.execPath, [CLI_DO_PRISMA, 'migrate', 'deploy'], {
-    env: { ...process.env, DATABASE_URL: url },
-    stdio: 'pipe'
-  });
+  rodarPrisma(['migrate', 'deploy'], url);
   process.env.DATABASE_URL = url;
 
   ({ banco } = await import('../../src/lib/servidor/banco/cliente'));

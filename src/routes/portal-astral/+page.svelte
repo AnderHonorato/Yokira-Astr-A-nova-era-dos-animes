@@ -1,6 +1,53 @@
 <script lang="ts">
   import './portal-astral.css';
+  import Guardiao from '$componentes/home/guardiao-articulado.svelte';
+  import { SvelteURLSearchParams } from 'svelte/reactivity';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   export let data;
+
+  $: mundos = [null, ...data.generos.map((genero) => genero.slug)];
+  $: atual = mundos.indexOf(data.filtros.genero);
+  const endereco = (genero: string | null, origem: URL) => {
+    const busca = new SvelteURLSearchParams(origem.search);
+    if (genero) busca.set('genero', genero);
+    else busca.delete('genero');
+    const parametros = busca.toString();
+    return '/portal-astral' + (parametros ? '?' + parametros : '');
+  };
+  let inicio: { x: number; y: number } | null = null;
+  function terminarGesto(evento: PointerEvent) {
+    if (!inicio) return;
+    const dx = evento.clientX - inicio.x;
+    const dy = evento.clientY - inicio.y;
+    inicio = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+      void goto(
+        endereco(mundos[(atual + (dx < 0 ? 1 : -1) + mundos.length) % mundos.length], $page.url),
+        { noScroll: true, keepFocus: true }
+      );
+    }
+  }
+  function gestos(no: HTMLElement) {
+    const iniciar = (e: PointerEvent) => {
+      if ((e.target as Element).closest('a')) return;
+      inicio = { x: e.clientX, y: e.clientY };
+      no.setPointerCapture(e.pointerId);
+    };
+    const cancelar = () => {
+      inicio = null;
+    };
+    no.addEventListener('pointerdown', iniciar);
+    no.addEventListener('pointerup', terminarGesto);
+    no.addEventListener('pointercancel', cancelar);
+    return {
+      destroy() {
+        no.removeEventListener('pointerdown', iniciar);
+        no.removeEventListener('pointerup', terminarGesto);
+        no.removeEventListener('pointercancel', cancelar);
+      }
+    };
+  }
   $: ambiente = (data.filtros.genero ?? 'universo')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -35,24 +82,51 @@
         >✦ Astra pode explorar com você <span aria-hidden="true">↗</span></a
       >
     </div>
-    <div class="portal-arte">
+    <div class="portal-arte" class:esquerda={data.acompanhante?.posicao === 'esquerda'} use:gestos>
+      {#if data.itens[0]}<img
+          class="portal-paisagem"
+          src={data.itens[0].poster}
+          alt=""
+          loading="lazy"
+          draggable="false"
+        />{/if}
       <span class="portal-arco" aria-hidden="true"></span>
-      <img
-        src="/mascotes/astra.webp"
-        width="230"
-        height="230"
-        alt="Astra, guardião cósmico do Portal Astral"
-        loading="lazy"
-      />
-      <span class="portal-legenda">GUARDIÃO / ASTRA</span>
+      {#if data.acompanhante}
+        <a
+          href="/companheiros"
+          class="portal-companheiro"
+          aria-label={'Ver ' + data.acompanhante.especie.nome}
+        >
+          <Guardiao
+            id="portal-equipado"
+            forma={data.acompanhante.formaSelecionada}
+            especie={data.acompanhante.especieId}
+            cor={data.acompanhante.corAura}
+            movimento="andar"
+          />
+        </a>
+      {/if}
+      <div class="portal-travessia">
+        <a
+          aria-label="Ambiente anterior"
+          href={endereco(mundos[(atual - 1 + mundos.length) % mundos.length], $page.url)}>‹</a
+        >
+        <span
+          >{data.generos.find((g) => g.slug === data.filtros.genero)?.nome ||
+            'Todos os mundos'}</span
+        >
+        <a
+          aria-label="Próximo ambiente"
+          href={endereco(mundos[(atual + 1) % mundos.length], $page.url)}>›</a
+        >
+      </div>
     </div>
   </section>
   <nav aria-label="Ambientes do Portal Astral" class="portal-generos">
-    <a href="/portal-astral" class:ativo={!data.filtros.genero}>Todos os mundos</a>
+    <a href={endereco(null, $page.url)} class:ativo={!data.filtros.genero}>Todos os mundos</a>
     {#each data.generos as genero (genero.id)}
-      <a
-        href={'/portal-astral?genero=' + encodeURIComponent(genero.slug)}
-        class:ativo={data.filtros.genero === genero.slug}>{genero.nome}</a
+      <a href={endereco(genero.slug, $page.url)} class:ativo={data.filtros.genero === genero.slug}
+        >{genero.nome}</a
       >
     {/each}
   </nav>

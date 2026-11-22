@@ -3,7 +3,7 @@
 // nao mock: o que queremos provar aqui e que a persistencia funciona.
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -18,6 +18,7 @@ const CLI_DO_PRISMA = createRequire(import.meta.url).resolve('prisma/build/index
 
 /** Roda um comando do Prisma contra o banco indicado. */
 export function rodarPrisma(argumentos: string[], url: string): void {
+  if (url.startsWith('file:')) writeFileSync(url.slice(5), '', { flag: 'a' });
   execFileSync(process.execPath, [CLI_DO_PRISMA, ...argumentos], {
     env: { ...process.env, DATABASE_URL: url },
     stdio: 'pipe'
@@ -31,7 +32,8 @@ export interface BancoDeTeste {
 
 export function criarBancoDeTeste(): BancoDeTeste {
   const pasta = mkdtempSync(join(tmpdir(), 'yokira-teste-'));
-  const url = `file:${join(pasta, 'teste.db')}`;
+  const arquivo = join(pasta, 'teste.db');
+  const url = `file:${arquivo}`;
 
   rodarPrisma(['migrate', 'deploy'], url);
 

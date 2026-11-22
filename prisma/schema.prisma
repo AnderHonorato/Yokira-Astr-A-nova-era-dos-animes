@@ -39,6 +39,9 @@ enum SituacaoTitulo {
 }
 
 model Usuario {
+  percursos PercursoEpisodio[]
+  pulsoJornada PulsoJornada?
+  conquistasJornada ConquistaJornada[]
   id             String   @id @default(cuid())
   email          String   @unique
   senhaHash      String
@@ -67,6 +70,7 @@ model Usuario {
   visualizacoes     Visualizacao[]
   companheiros      CompanheiroMascote[]
   preferenciasMascote PreferenciasMascote?
+  quarto QuartoOtaku?
 
   @@index([papel])
 }
@@ -160,6 +164,7 @@ model Titulo {
   totalVisualizacoes Int @default(0) @map("visualizacoes")
   totalCurtidas      Int @default(0) @map("curtidas")
   posterUrl   String?
+  postersQuarto ObjetoQuarto[]
   arteHeroUrl String?
   criadoEm    DateTime @default(now())
   atualizadoEm DateTime @updatedAt
@@ -197,6 +202,7 @@ model Temporada {
 }
 
 model Episodio {
+  percursos PercursoEpisodio[]
   id           String @id @default(cuid())
   temporadaId  String
   numero       Int
@@ -473,9 +479,60 @@ model EventoMascote {
 }
 
 model PreferenciasMascote {
+  temaEstante    String @default("ametista")
   usuarioId      String @id
   visivel        Boolean @default(true)
   acompanhar     Boolean @default(true)
   posicao        String @default("direita")
   usuario        Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}
+
+model QuartoOtaku {
+  id        String @id @default(cuid())
+  usuarioId String @unique
+  tema      String @default("observatorio")
+  iluminacao String @default("luar")
+  publico   Boolean @default(false)
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  objetos   ObjetoQuarto[]
+}
+
+model ObjetoQuarto {
+  id       String @id @default(cuid())
+  quartoId String
+  chave    String
+  tituloId String?
+  x        Int @default(50)
+  y        Int @default(65)
+  rotacao  Int @default(0)
+  colocado Boolean @default(false)
+  quarto   QuartoOtaku @relation(fields: [quartoId], references: [id], onDelete: Cascade)
+  titulo   Titulo? @relation(fields: [tituloId], references: [id], onDelete: Cascade)
+  @@unique([quartoId, chave])
+}
+
+model PercursoEpisodio {
+  usuarioId String
+  episodioId String
+  cobertura Int @default(0)
+  validado Boolean @default(false)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  episodio Episodio @relation(fields: [episodioId], references: [id], onDelete: Cascade)
+  @@id([usuarioId, episodioId])
+}
+
+model PulsoJornada {
+  usuarioId String @id
+  episodioId String
+  posicao Int
+  recebidoEm DateTime
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}
+
+model ConquistaJornada {
+  usuarioId String
+  chave String
+  criadoEm DateTime @default(now())
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  @@id([usuarioId, chave])
 }

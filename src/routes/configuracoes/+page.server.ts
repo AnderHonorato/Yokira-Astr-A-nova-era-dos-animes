@@ -4,6 +4,7 @@
 
 import { dev } from '$app/environment';
 import { fail, redirect } from '@sveltejs/kit';
+import { DESAFIOS } from '$servidor/mascotes/jornada';
 import { banco } from '$servidor/banco/cliente';
 import { enviarVerificacaoDeEmail } from '$servidor/email/fluxos-de-conta';
 import { NOME_COOKIE_TEMA, normalizarTema } from '$lib/validacoes/tema';
@@ -13,22 +14,35 @@ const UM_ANO_EM_SEGUNDOS = 60 * 60 * 24 * 365;
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (!locals.usuario) {
-    return { tema: locals.tema, sessoesAtivas: 0, email: null, emailVerificado: false };
+    return {
+      tema: locals.tema,
+      sessoesAtivas: 0,
+      conquistas: [],
+      email: null,
+      emailVerificado: false
+    };
   }
 
-  const [sessoesAtivas, conta] = await Promise.all([
+  const [sessoesAtivas, conta, conquistas] = await Promise.all([
     banco.sessao.count({
       where: { usuarioId: locals.usuario.id, revogadaEm: null, expiraEm: { gt: new Date() } }
     }),
     banco.usuario.findUnique({
       where: { id: locals.usuario.id },
       select: { emailVerificado: true, email: true }
+    }),
+    banco.conquistaJornada.findMany({
+      where: { usuarioId: locals.usuario.id, chave: { in: DESAFIOS.map((m) => m.chave) } },
+      select: { chave: true }
     })
   ]);
 
   return {
     tema: locals.tema,
     sessoesAtivas,
+    conquistas: DESAFIOS.filter((m) => conquistas.some((c) => c.chave === m.chave)).map(
+      (m) => m.premio
+    ),
     email: conta?.email ?? locals.usuario.email,
     emailVerificado: conta?.emailVerificado ?? false
   };

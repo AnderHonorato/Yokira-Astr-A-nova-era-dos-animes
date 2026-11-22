@@ -1,6 +1,13 @@
 <script lang="ts">
   import './biblioteca-magica.css';
+  import Guardiao from '$componentes/home/guardiao-articulado.svelte';
   export let data;
+  export let form;
+  const estantes = [
+    ['quero-ver', 'Quero ver'],
+    ['assistindo', 'Em andamento'],
+    ['concluido', 'Concluídos']
+  ] as const;
   let busca = '';
   let filtro = 'todos';
   let aberto: string | null = null;
@@ -12,7 +19,7 @@
 </script>
 
 <svelte:head><title>Biblioteca Mágica — Minha Lista | Yōkira Astra</title></svelte:head>
-<div class="biblioteca">
+<div class="biblioteca" data-tema={data.temaEstante}>
   <header class="biblioteca-cabecalho">
     <span class="biblioteca-selo">✧ &nbsp; COLEÇÃO PESSOAL / BIBLIOTECA MÁGICA</span>
     <h1>Cada história é um <span>novo mundo.</span></h1>
@@ -47,6 +54,16 @@
       >
       <span>{filtrados.length} livro(s)</span>
     </div>
+    <form method="POST" action="?/estante" class="biblioteca-tema">
+      <label
+        >Tema da estante <select name="tema" value={data.temaEstante}>
+          <option value="ametista">Ametista</option><option value="cedro">Cedro</option><option
+            value="lunar">Luar</option
+          >
+        </select></label
+      ><button>Salvar tema</button>
+      {#if form?.recado}<span role="status">{form.recado}</span>{/if}
+    </form>
     {#if data.livros.length === 0}
       <section class="biblioteca-vazia">
         <h2>A primeira estante está pronta.</h2>
@@ -59,52 +76,69 @@
         <p>Experimente outro título ou estante.</p>
       </section>
     {:else}
-      <div class="biblioteca-estante">
-        {#each filtrados as livro (livro.id)}
-          <article class="biblioteca-livro" class:biblioteca-aberto={aberto === livro.id}>
-            <button
-              type="button"
-              class="biblioteca-capa"
-              aria-expanded={aberto === livro.id}
-              aria-label={'Abrir livro ' + livro.nome}
-              on:click={() => (aberto = aberto === livro.id ? null : livro.id)}
-            >
-              <span class="biblioteca-lombada" aria-hidden="true"></span>
-              <img
-                src={livro.poster}
-                alt={'Capa de ' + livro.nome}
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="biblioteca-selo-status"
-                >{livro.status === 'concluido'
-                  ? 'Concluído'
-                  : livro.status === 'assistindo'
-                    ? 'Lendo'
-                    : 'Na estante'}</span
-              >
-            </button>
-            <div class="biblioteca-livro-dados">
-              <strong>{livro.nome}</strong>
-              <small
-                >{livro.episodiosConcluidos} / {livro.episodiosTotal} episódios concluídos</small
-              >
-              {#if aberto === livro.id}
-                <div class="biblioteca-folhas">
-                  <p>{livro.sinopseCurta}</p>
-                  <a href={'/titulo/' + livro.slug}>Abrir anime ↗</a>
-                </div>
-              {/if}
+      {#each estantes as [status, nome] (status)}
+        {@const livros = filtrados.filter((livro) => livro.status === status)}
+        {#if livros.length}
+          <section aria-label={nome}>
+            <h2 class="nome-estante">{nome} <small>{livros.length}</small></h2>
+            <div class="biblioteca-estante">
+              {#each livros as livro (livro.id)}
+                <article class="biblioteca-livro" class:biblioteca-aberto={aberto === livro.id}>
+                  <button
+                    type="button"
+                    class="biblioteca-capa"
+                    aria-expanded={aberto === livro.id}
+                    aria-label={'Abrir livro ' + livro.nome}
+                    on:click={() => (aberto = aberto === livro.id ? null : livro.id)}
+                  >
+                    <span class="biblioteca-lombada" aria-hidden="true"></span>
+                    <img
+                      src={livro.poster}
+                      alt={'Capa de ' + livro.nome}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span class="biblioteca-selo-status"
+                      >{livro.status === 'concluido'
+                        ? 'Concluído'
+                        : livro.status === 'assistindo'
+                          ? 'Lendo'
+                          : 'Na estante'}</span
+                    >
+                  </button>
+                  <div class="biblioteca-livro-dados">
+                    <strong>{livro.nome}</strong>
+                    <small
+                      >{livro.episodiosConcluidos} / {livro.episodiosTotal} episódios concluídos</small
+                    >
+                    {#if aberto === livro.id}
+                      <div class="biblioteca-folhas">
+                        {#if data.acompanhante}<div
+                            class="leitor"
+                            class:esquerda={data.acompanhante.posicao === 'esquerda'}
+                          >
+                            <Guardiao
+                              id={'leitor-' + livro.id}
+                              especie={data.acompanhante.especieId}
+                              forma={data.acompanhante.formaSelecionada}
+                              cor={data.acompanhante.corAura}
+                              movimento="sentar"
+                            />
+                          </div>{/if}
+                        <p>{livro.sinopseCurta}</p>
+                        <a href={'/titulo/' + livro.slug}>Abrir anime ↗</a>
+                      </div>
+                    {/if}
+                  </div>
+                </article>
+              {/each}
             </div>
-          </article>
-        {/each}
-      </div>
+          </section>
+        {/if}
+      {/each}
     {/if}
   {/if}
   <footer class="biblioteca-rodape">
-    <a href="/companheiros"
-      ><img src="/mascotes/astra.webp" width="55" height="55" alt="Mascote Astra" />Astra acompanha
-      suas descobertas <span aria-hidden="true">↗</span></a
-    >
+    <a href="/companheiros">Minha coleção de companheiros ↗</a>
   </footer>
 </div>

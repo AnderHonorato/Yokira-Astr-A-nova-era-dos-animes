@@ -574,3 +574,16 @@
     transition: none;
   }
 }
+
+.previa-forma {
+  min-width: 0;
+  flex: 1;
+}
+.previa-forma summary {
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.modelo-previa {
+  width: min(100%, 160px);
+}

@@ -1,5 +1,9 @@
 const universo = [
   '/companheiros',
+  '/jornada',
+  '/quarto-otaku',
+  '/assistente',
+  '/acompanhar',
   '/portal-astral',
   '/biblioteca-magica',
   '/entrar',

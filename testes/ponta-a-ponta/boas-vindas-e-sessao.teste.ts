@@ -116,6 +116,8 @@ test('sair da conta some com o painel na volta imediata à home', async ({ page 
     .catch(() => {});
 
   await page.goto('/');
+  const mais = page.getByRole('button', { name: 'Mais', exact: true });
+  if (await mais.isVisible()) await mais.click();
   await expect(page.getByRole('link', { name: 'Painel administrativo' })).toBeVisible();
 
   await page.goto('/configuracoes');
