@@ -1,20 +1,21 @@
-# Origem do Yokira publicado
+# Origem confirmada da interface Yokira publicada
 
-**Repositório de origem:** https://github.com/AnderHonorato/Yokira-2.0
+Site verificado: https://yokira-2-ander.honoratoann.chatgpt.site/
 
-**Branch exato:** `main-ChatGPT`
+Fonte pública: https://github.com/AnderHonorato/Yokira-2.0/tree/sol/identidade-login-temas-20261105/versao-sites
 
-**Commit importado:** `7b501e1b7f078ccb9d7ddcc557c00bc61cd486d1`
+Commit exato: `25afce82e1983f6add6397ea7a946a39ba673f0b`
 
-**Diretório do site publicado:** `versao-sites/` (Vinext / React, Cloudflare D1).
+Este diretório foi copiado integralmente de `versao-sites/` desse commit:
+código de home, busca, navegação, catálogo, player, comunidade, amizades,
+salas, jogos, assets, rotas, worker, migrações e testes de Sites.
 
-Esta importação usa os arquivos reais do frontend original, não uma recriação do layout.
+A branch `main-ChatGPT` é uma versão diferente e mais antiga do frontend,
+apesar do nome; sua home mostra "Todo anime é um novo universo" e não
+corresponde à home publicada verificada ("Acervo de animes").
 
-A aplicação SvelteKit/Prisma do novo projeto permanece na raiz para evolução
-dos mascotes, Portal Astral e Biblioteca Mágica. As contas e a base de dados
-de produção do site original NÃO são copiadas por um clone de código.
-Vincular identidades e progresso entre as arquiteturas requer integração
-explícita e testes; não presumir que está pronto.
-
-O repositório `AnderHonorato/Yokira-Astra/main` era uma base anterior
-independente e não contém a implementação `versao-sites/` do site publicado.
+As funcionalidades novas dos mascotes, Portal Astral e Biblioteca Mágica
+estão na aplicação SvelteKit/Prisma da raiz. A integração com autenticação
+e persistência Cloudflare D1 do frontend precisa ser construída e validada.
+Não se deve confundir código clonado com dados da produção nem prévia estática
+com publicação completa.
