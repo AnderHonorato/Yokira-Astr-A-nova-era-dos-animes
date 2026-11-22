@@ -19,10 +19,9 @@ export const ITENS_DE_NAVEGACAO: ItemDeNavegacao[] = [
 
 export const ITENS_DA_BARRA_INFERIOR = [
   { href: '/', rotulo: 'Início', icone: 'casa' },
-  { href: '/catalogo', rotulo: 'Catálogo', icone: 'grade-catalogo' },
-  { href: '/novidades', rotulo: 'Novidades', icone: 'novidades-brilho' },
-  { href: '/minha-lista', rotulo: 'Minha Lista', icone: 'marcador-lista' },
-  { href: '/configuracoes', rotulo: 'Configurações', icone: 'engrenagem' }
+  { href: '/catalogo', rotulo: 'Acervo', icone: 'grade-catalogo' },
+  { href: '/buscar', rotulo: 'Buscar', icone: 'lupa' },
+  { href: '/configuracoes', rotulo: 'Meu perfil', icone: 'perfil' }
 ] as const;
 
 /** A home so acende em "/" exato; as outras acendem tambem nas subrotas. */

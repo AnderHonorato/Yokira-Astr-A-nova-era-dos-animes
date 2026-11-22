@@ -56,3 +56,76 @@
     display: none;
   }
 }
+
+/* Mobile igual à navegação do site atual: Início, Acervo, Buscar, Meu perfil e Mais. */
+.barra-inferior {
+  background: #0a0d14;
+  border-color: #1c2634;
+  padding: 5px 8px max(5px, env(safe-area-inset-bottom));
+}
+.barra-inferior-item {
+  min-height: 54px;
+  border-radius: 11px;
+  gap: 5px;
+  font-size: 10px;
+  color: #a2b2cf;
+}
+.barra-inferior-ativo {
+  background: #121b2b;
+  color: #5796ff;
+}
+.barra-inferior-rotulo {
+  font-size: 10px;
+  font-weight: 600;
+}
+.barra-inferior-mais {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}
+.barra-inferior-menu {
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  bottom: calc(100% + 10px);
+  width: min(295px, calc(100vw - 24px));
+  max-height: min(65vh, 470px);
+  overflow-y: auto;
+  padding: 11px;
+  border: 1px solid #26364d;
+  border-radius: 14px;
+  background: #111827;
+  box-shadow: 0 16px 60px #020409d9;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.barra-inferior-menu[hidden] {
+  display: none;
+}
+.barra-inferior-menu-titulo {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  font-weight: 750;
+  color: #8ba2c6;
+  padding: 11px 12px;
+}
+.barra-inferior-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 43px;
+  padding: 10px 12px;
+  color: #e5edfb;
+  font-size: 13px;
+  border-radius: 8px;
+}
+.barra-inferior-menu a:hover,
+.barra-inferior-menu a:focus-visible {
+  background: #20314f;
+  color: #fff;
+}
+@media (min-width: 1024px) {
+  .barra-inferior {
+    display: none;
+  }
+}

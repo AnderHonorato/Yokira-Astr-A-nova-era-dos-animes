@@ -207,3 +207,10 @@
     padding: 0 6px;
   }
 }
+
+/* O site Yokira atual reserva a navegação no rodapé em telas pequenas. */
+@media (max-width: 850px) {
+  .cabecalho {
+    display: none;
+  }
+}

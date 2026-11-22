@@ -68,5 +68,5 @@
   </main>
 
   <Rodape />
-  <BarraInferior />
+  <BarraInferior usuario={data.usuario} podeAcessarPainel={data.podeAcessarPainel} />
 </div>

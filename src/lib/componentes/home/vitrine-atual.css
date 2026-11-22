@@ -724,3 +724,123 @@
     transform: none;
   }
 }
+
+/* Composição mobile replicada do Yokira atual: hero ocupa a primeira dobra. */
+@media (max-width: 600px) {
+  .yka-home {
+    margin-inline: calc(-1 * var(--espaco-4));
+    padding-top: 0;
+  }
+  .yka-abertura {
+    margin: 0 0 16px;
+    padding-bottom: 18px;
+    gap: 6px;
+  }
+  .yka-cenario {
+    min-height: 234px;
+  }
+  .yka-cenario-copy {
+    top: 14%;
+    left: 10px;
+    gap: 12px;
+  }
+  .yka-cenario-copy > img {
+    width: 95px;
+  }
+  .yka-cenario-nome > span {
+    font-size: 20px;
+    letter-spacing: 0.15em;
+  }
+  .yka-cenario-nome h1 {
+    font-size: 22px;
+    margin: 5px 0 0;
+  }
+  .yka-cenario-acoes {
+    left: 14px;
+    bottom: 13%;
+  }
+  .yka-cenario-acoes p {
+    margin-bottom: 13px;
+    font-size: 12px;
+  }
+  .yka-cenario-acoes > div {
+    gap: 15px;
+  }
+  .yka-botao-principal {
+    padding: 9px 13px;
+    font-size: 11px;
+    min-height: 42px;
+  }
+  .yka-melhores {
+    margin: 0 14px;
+    padding: 0 0 2px;
+    border: 0;
+    background: transparent;
+  }
+  .yka-melhores-cabecalho {
+    margin-bottom: 5px;
+  }
+  .yka-melhores-cabecalho h2 {
+    font-size: 19px;
+    font-family: var(--fonte-base);
+  }
+  .yka-melhores li > a {
+    min-height: 64px;
+  }
+  .yka-melhores li > a.principal {
+    margin: 0;
+    padding: 5px;
+    border-radius: 6px;
+  }
+  .yka-melhores-texto strong {
+    font-size: 10px;
+  }
+  .yka-melhores-texto small {
+    font-size: 8px;
+  }
+  .yka-melhores-texto em {
+    font-size: 9px;
+  }
+  .yka-nota {
+    display: none;
+  }
+  .yka-ranking-rodape {
+    padding: 12px 0 0;
+  }
+  .yka-banner {
+    margin: 0 14px 26px;
+    min-height: 312px;
+  }
+  .yka-banner-copy {
+    padding: 42px 16px 54px;
+  }
+  .yka-banner-copy h2 {
+    font-size: 29px;
+    margin: 13px 0;
+  }
+  .yka-banner-copy > span {
+    font-size: 8px;
+  }
+  .yka-banner-meta {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .yka-banner-sinopse {
+    display: none;
+  }
+  .yka-banner-links {
+    margin-top: 21px;
+  }
+  .yka-banner-personagem {
+    height: 90%;
+    max-width: 67%;
+    right: -5%;
+    bottom: 0;
+    opacity: 1;
+  }
+  .yka-experiencias,
+  .yka-acervo,
+  .yka-editorial {
+    margin: 30px 14px 35px;
+  }
+}
