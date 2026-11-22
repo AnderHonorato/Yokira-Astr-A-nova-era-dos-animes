@@ -17,12 +17,12 @@
 <header class="cabecalho">
   <div class="cabecalho-faixa">
     <a class="cabecalho-logo" href="/" aria-label="Yōkira Animes — página inicial">
-      <LogoYokira />
+      <LogoYokira compacta />
     </a>
 
     <div class="cabecalho-acoes">
       <a class="cabecalho-botao-icone" href="/buscar" aria-label="Buscar títulos">
-        <Lupa tamanho={20} />
+        <Lupa tamanho={18} /><span class="cabecalho-busca-texto">Buscar</span>
       </a>
 
       <!-- Sem este atalho o painel so era alcancavel digitando /admin na barra de
@@ -43,7 +43,7 @@
       </a>
 
       {#if !usuario}
-        <a class="cabecalho-assinar" href="/entrar">Assinar e Logar</a>
+        <a class="cabecalho-assinar" href="/entrar">Entrar</a>
       {/if}
     </div>
 

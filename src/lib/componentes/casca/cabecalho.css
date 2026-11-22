@@ -128,3 +128,82 @@
     display: inline;
   }
 }
+
+/* Ajustes de identidade recuperados da home Yokira publicada. */
+.cabecalho {
+  padding: 0 clamp(12px, 1.7vw, 26px);
+  background: #090c10;
+  border-bottom: 1px solid #1e2735;
+}
+.cabecalho-faixa {
+  max-width: 1780px;
+  min-height: 65px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'logo nav acoes';
+  gap: 20px;
+}
+.cabecalho-navegacao {
+  padding: 0;
+  min-width: 0;
+}
+.cabecalho-logo {
+  min-height: 58px;
+}
+.cabecalho-acoes {
+  gap: 12px;
+}
+.cabecalho-botao-icone {
+  width: auto;
+  display: inline-flex;
+  gap: 8px;
+  padding: 0 8px;
+  font-size: 11px;
+  color: #bcc9de;
+}
+.cabecalho-busca-texto {
+  display: inline;
+  font-size: 11px;
+}
+.cabecalho-assinar {
+  display: inline-flex;
+  padding: 0 10px;
+  min-height: 42px;
+  background: transparent;
+  color: #dee7f5;
+  font-size: 12px;
+}
+.cabecalho-assinar:hover {
+  background: #152034;
+  color: #fff;
+}
+.cabecalho-avatar {
+  border-color: #263448;
+  background: #10161f;
+  width: 37px;
+  height: 37px;
+}
+@media (max-width: 850px) {
+  .cabecalho-faixa {
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 'logo acoes' 'nav nav';
+    min-height: 0;
+    gap: 0 10px;
+  }
+  .cabecalho-logo {
+    min-height: 52px;
+  }
+  .cabecalho-navegacao {
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
+  .cabecalho-acoes {
+    gap: 5px;
+  }
+  .cabecalho-busca-texto {
+    display: none;
+  }
+  .cabecalho-assinar {
+    font-size: 10px;
+    padding: 0 6px;
+  }
+}

@@ -99,3 +99,17 @@
 - Código: [repositório novo](https://github.com/AnderHonorato/Yokira-Astr-A-nova-era-dos-animes)
 - Esta lista: `CHECKLIST-UNIVERSO-YOKIRA.md` na raiz
 - Rotas a verificar: `/companheiros`, `/portal-astral`, `/biblioteca-magica`
+
+## 7. Identidade e conteúdo do site atual — correção de 22/11/2026
+
+- [x] ✅ Identificada a causa do visual vazio: o banco anterior usava 14 títulos fictícios e imagens geradas, enquanto o [Yokira publicado](https://yokira-2-ander.honoratoann.chatgpt.site/) expõe 20 animes conhecidos.
+- [x] ✅ Recuperadas as 20 capas e as imagens largas de referência a partir dos arquivos do próprio projeto anterior (`Yokira-2.0/main-ChatGPT`).
+- [x] ✅ Recuperados o cenário de cerejeiras/lua e o banner original de One Piece, incluindo o personagem, diretamente do site atual.
+- [x] ✅ Página inicial redesenhada com a composição do site publicado: cenário japonês + ranking lateral, banner One Piece, atalhos, grades com capas e editoriais.
+- [x] ✅ Importador idempotente de metadados, gêneros e episódios referenciais, respeitando o banco Prisma e sem criar URLs de streaming fictícias.
+- [x] ✅ Seed padrão importa títulos originais, preserva contas e esconde apenas títulos de demonstração do catálogo público (não apaga os registros).
+- [x] ✅ Notas editoriais do catálogo de referência distinguíveis das avaliações reais da comunidade.
+- [x] ✅ A leitura integral dos editoriais abre em `/editorial/[id]`.
+- [ ] 🟡 Comparar screenshots e validar todas as seções em 390px e 1440px após a última atualização.
+- [ ] ⏳ Paridade total de comunidade, amizades, salas, jogos e agenda: existem no site publicado anterior, mas não foram portados integralmente para o backend SvelteKit atual.
+- [ ] ⏳ Fontes de episódios licenciados: importar somente com autorização; capas e metadados não equivalem a vídeos disponíveis.

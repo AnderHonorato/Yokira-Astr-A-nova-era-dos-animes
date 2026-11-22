@@ -8,6 +8,7 @@ export interface CartaoDeTitulo {
   nome: string;
   ano: number;
   nota: number | null;
+  notaOrigem?: 'comunidade' | 'editorial' | 'sem-nota';
   poster: string;
   classificacao: string;
   novidade: boolean;
@@ -55,6 +56,8 @@ export interface FaixaDaHome {
 }
 
 export interface CatalogoPublico {
+  /** Quantidade real de títulos publicados no banco. */
+  totalTitulos?: number;
   destaques: DestaqueDoHero[];
   faixa: FaixaDaHome | null;
   trilhas: TrilhaDeConteudo[];

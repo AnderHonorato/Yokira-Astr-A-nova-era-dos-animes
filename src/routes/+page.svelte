@@ -1,7 +1,7 @@
 <!-- Arquivo: src/routes/+page.svelte -->
 <!-- Home: hero rotativo + trilhas Populares / Em alta / Novidades (imagens 1 e 2). -->
 <script lang="ts">
-  import BannerDestaque from '$componentes/home/banner-destaque.svelte';
+  import VitrineAtual from '$componentes/home/vitrine-atual.svelte';
   import MascoteAstra from '$componentes/home/mascote-astra.svelte';
   import FaixaPromocional from '$componentes/comum/faixa-promocional.svelte';
   import TrilhaConteudo from '$componentes/home/trilha-conteudo.svelte';
@@ -42,7 +42,7 @@
   />
 </svelte:head>
 
-<BannerDestaque destaques={catalogo.destaques} />
+<VitrineAtual {catalogo} />
 <MascoteAstra />
 
 <!-- Faixa escrita no painel. So aparece quando alguem ligou E escreveu algo nela. -->

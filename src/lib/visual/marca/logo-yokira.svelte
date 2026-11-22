@@ -8,7 +8,9 @@
 </script>
 
 <span class="marca-logo" class:marca-compacta={compacta}>
-  <span class="marca-titulo">Y<span>Ō</span>K<span class="marca-destaque">IRA</span></span>
+  <span class="marca-titulo"
+    >{#if compacta}YOKIRA{:else}Y<span>Ō</span>K<span class="marca-destaque">IRA</span>{/if}</span
+  >
   {#if !compacta}
     <span class="marca-subtitulo">A N I M E E S</span>
   {/if}

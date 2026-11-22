@@ -1,6 +1,6 @@
 // Arquivo: prisma/seed.ts
-// Popula o banco com o catalogo ficticio + contas de demonstracao.
-// Idempotente: pode rodar de novo sem duplicar nada.
+// Inicializa contas de teste e importa o catálogo original publicado, sem criar fontes de vídeo.
+// Idempotente: repetir não duplica títulos, episódios, avaliações ou mascotes.
 
 import 'dotenv/config';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
@@ -8,6 +8,7 @@ import { PrismaClient } from '../src/lib/servidor/banco/gerado/client.js';
 import { GENEROS, NOMES_DE_EPISODIO, TITULOS } from './dados-ficticios.js';
 import { garantirVotantes, semearContas } from './contas-de-demonstracao.js';
 import { semear } from '../src/lib/visual/posters/gerar-poster.js';
+import { importarCatalogoOriginal } from '../scripts/sincronizar-catalogo-original.js';
 
 const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? 'file:./dev.db' });
 const banco = new PrismaClient({ adapter });
@@ -93,7 +94,10 @@ async function semearTemporadas(
 }
 
 async function semearAvaliacoes(): Promise<void> {
-  const titulos = await banco.titulo.findMany({ select: { id: true, slug: true } });
+  const titulos = await banco.titulo.findMany({
+    where: { slug: { in: TITULOS.map((titulo) => titulo.slug) } },
+    select: { id: true, slug: true }
+  });
 
   // Varias avaliacoes por titulo em vez de uma so: com um voto unico toda nota saia
   // inteira (9.0, 10.0) e a tela ficava com o mesmo numero repetido em tudo.
@@ -129,5 +133,12 @@ const generos = await semearGeneros();
 await semearTitulos(generos);
 await semearContas(banco);
 await semearAvaliacoes();
-console.log('Seed concluido: catalogo ficticio + contas de demonstracao.');
 await banco.$disconnect();
+const resultado = await importarCatalogoOriginal({
+  ocultarDemonstracao: true,
+  atualizarExistentes: false
+});
+console.log(
+  'Seed concluído: catálogo original do Yokira + contas de teste; dados fictícios preservados fora do catálogo público.',
+  resultado
+);

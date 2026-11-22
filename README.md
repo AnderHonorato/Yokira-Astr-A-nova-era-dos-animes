@@ -4,7 +4,7 @@
 
 # Yōkira Astra
 
-**Nova era:** [Checklist completo de implementação, pendências, testes e erros](CHECKLIST-UNIVERSO-YOKIRA.md).  
+**Nova era:** [Checklist completo de implementação, pendências, testes e erros](CHECKLIST-UNIVERSO-YOKIRA.md).\n\n**Conteúdo original:** a home recupera o catálogo de 20 animes, capas, cenário com cerejeiras e banners do Yokira publicado. O comando de seed `npm run banco:semear` importa metadados via `scripts/sincronizar-catalogo-original.ts`, sem copiar contas ou criar vídeos de animes. Os títulos fictícios antigos permanecem armazenados, mas fora da vitrine pública.  
 **Novas seções:** [Companheiros](src/routes/companheiros) · [Portal Astral](src/routes/portal-astral) · [Biblioteca Mágica](src/routes/biblioteca-magica).
 
 Plataforma de catálogo e streaming de animes, em português, feita com SvelteKit,

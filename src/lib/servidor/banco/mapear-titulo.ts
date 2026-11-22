@@ -2,6 +2,7 @@
 // Traducao Prisma -> formato da interface. Isolado pra ser testavel sem tocar no banco.
 
 import { arteLargaEmDataUri, posterEmDataUri } from '../../visual/posters/gerar-poster.js';
+import { catalogo as catalogoOriginal } from '../../catalogo-original.js';
 import type { CartaoDeTitulo, DestaqueDoHero } from './tipos-catalogo.js';
 
 export interface TituloBruto {
@@ -51,6 +52,8 @@ function rotuloDoCartao(bruto: TituloBruto, temporadas: number, ultimaTemporada:
   return '1 temporada';
 }
 
+const notasEditoriais = new Map(catalogoOriginal.map((item) => [item.slug, item.nota]));
+
 export function paraCartao(bruto: TituloBruto, assistindoAgora = 0): CartaoDeTitulo {
   const temporadas = bruto.temporadas.length;
   const ultimaTemporada = temporadas > 0 ? Math.max(...bruto.temporadas.map((t) => t.numero)) : 1;
@@ -60,7 +63,12 @@ export function paraCartao(bruto: TituloBruto, assistindoAgora = 0): CartaoDeTit
     slug: bruto.slug,
     nome: bruto.nome,
     ano: bruto.ano,
-    nota: calcularNota(bruto.avaliacoes),
+    nota: calcularNota(bruto.avaliacoes) ?? notasEditoriais.get(bruto.slug) ?? null,
+    notaOrigem: bruto.avaliacoes.length
+      ? 'comunidade'
+      : notasEditoriais.has(bruto.slug)
+        ? 'editorial'
+        : 'sem-nota',
     poster: bruto.posterUrl ?? posterEmDataUri(bruto.slug, bruto.nome),
     classificacao: bruto.classificacao,
     novidade: bruto.novidade,

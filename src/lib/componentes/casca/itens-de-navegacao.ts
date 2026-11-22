@@ -9,9 +9,11 @@ export interface ItemDeNavegacao {
 
 export const ITENS_DE_NAVEGACAO: ItemDeNavegacao[] = [
   { href: '/', rotulo: 'Início' },
-  { href: '/catalogo', rotulo: 'Catálogo' },
+  { href: '/catalogo', rotulo: 'Acervo' },
+  { href: '/portal-astral', rotulo: 'Portal Astral' },
+  { href: '/biblioteca-magica', rotulo: 'Biblioteca' },
+  { href: '/companheiros', rotulo: 'Companheiros' },
   { href: '/novidades', rotulo: 'Novidades' },
-  { href: '/generos', rotulo: 'Gêneros' },
   { href: '/minha-lista', rotulo: 'Minha Lista' }
 ];
 

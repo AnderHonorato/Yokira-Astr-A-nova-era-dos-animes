@@ -12,7 +12,7 @@ import type { CatalogoPublico, TrilhaDeConteudo } from './tipos-catalogo.js';
 // Versao 2: os cartoes passaram a trazer visualizacoes e curtidas, e a fileira "em alta"
 // mudou de criterio. O numero e o que invalida o cache no IndexedDB de quem ja tem a
 // versao antiga guardada — sem subir aqui, a home antiga continuaria sendo pintada.
-export const VERSAO_DO_CATALOGO = 2;
+export const VERSAO_DO_CATALOGO = 3;
 
 async function buscar(where: object, ordem: object, limite = 14): Promise<TituloBruto[]> {
   return banco.titulo.findMany({
@@ -64,12 +64,13 @@ async function trilhaEmAlta(): Promise<TrilhaDeConteudo> {
 }
 
 export async function montarCatalogoPublico(): Promise<CatalogoPublico> {
-  const [destaques, populares, novidades, emAlta, faixa] = await Promise.all([
+  const [destaques, populares, novidades, emAlta, faixa, totalTitulos] = await Promise.all([
     buscar({ destaque: true }, { popularidade: 'desc' }, 5),
     buscar({}, { popularidade: 'desc' }),
     buscar({ novidade: true }, { atualizadoEm: 'desc' }),
     trilhaEmAlta(),
-    faixaVisivel('home')
+    faixaVisivel('home'),
+    banco.titulo.count({ where: { situacao: 'PUBLICADO' } })
   ]);
 
   const restantes = await Promise.all([
@@ -78,6 +79,7 @@ export async function montarCatalogoPublico(): Promise<CatalogoPublico> {
   ]);
 
   return {
+    totalTitulos,
     destaques: destaques.map(paraDestaque),
     faixa: faixa
       ? {

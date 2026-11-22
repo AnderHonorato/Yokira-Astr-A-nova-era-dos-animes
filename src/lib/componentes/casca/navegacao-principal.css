@@ -38,3 +38,28 @@
     gap: var(--espaco-8);
   }
 }
+
+.nav-principal-lista {
+  gap: 18px;
+}
+.nav-principal-item {
+  min-height: 65px;
+  color: #a8b4c8;
+  font-size: 11px;
+  font-weight: 600;
+}
+.nav-principal-ativo {
+  color: #e2ecfc;
+  border-bottom-color: #4c87f7;
+}
+.nav-principal-item:hover {
+  color: #f1f5fe;
+}
+@media (max-width: 850px) {
+  .nav-principal-item {
+    min-height: 44px;
+  }
+  .nav-principal-lista {
+    gap: 18px;
+  }
+}
