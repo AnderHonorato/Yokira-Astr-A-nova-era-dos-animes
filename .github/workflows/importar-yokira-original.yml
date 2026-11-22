@@ -1,0 +1,63 @@
+name: Importar a base correta do Yokira publicado
+on:
+  push:
+    paths:
+      - .github/workflows/importar-yokira-original.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Clonar a fonte exata do site publicado
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --branch main-ChatGPT \
+            https://github.com/AnderHonorato/Yokira-2.0.git \
+            /tmp/yokira-original
+          atual="$(git -C /tmp/yokira-original rev-parse HEAD)"
+          esperado="7b501e1b7f078ccb9d7ddcc557c00bc61cd486d1"
+          if [[ "$atual" != "$esperado" ]]; then
+            echo "::error::A fonte mudou desde a auditoria; importação interrompida para revisão."
+            exit 1
+          fi
+          test -f /tmp/yokira-original/versao-sites/app/portal.tsx
+          test -f /tmp/yokira-original/versao-sites/app/componentes/hero.tsx
+          mkdir -p versao-sites docs/origem
+          cp -a /tmp/yokira-original/versao-sites/. versao-sites/
+          cat > docs/origem/REPOSITORIO-FONTE.md <<'EOF'
+          # Origem do Yokira publicado
+
+          **Repositório de origem:** https://github.com/AnderHonorato/Yokira-2.0
+
+          **Branch exato:** `main-ChatGPT`
+
+          **Commit importado:** `7b501e1b7f078ccb9d7ddcc557c00bc61cd486d1`
+
+          **Diretório do site publicado:** `versao-sites/` (Vinext / React, Cloudflare D1).
+
+          Esta importação usa os arquivos reais do frontend original, não uma recriação do layout.
+
+          A aplicação SvelteKit/Prisma do novo projeto permanece na raiz para evolução
+          dos mascotes, Portal Astral e Biblioteca Mágica. As contas e a base de dados
+          de produção do site original NÃO são copiadas por um clone de código.
+          Vincular identidades e progresso entre as arquiteturas requer integração
+          explícita e testes; não presumir que está pronto.
+
+          O repositório `AnderHonorato/Yokira-Astra/main` era uma base anterior
+          independente e não contém a implementação `versao-sites/` do site publicado.
+          EOF
+          git config user.name "Yokira CI"
+          git config user.email "200148189+AnderHonorato@users.noreply.github.com"
+          git add versao-sites docs/origem/REPOSITORIO-FONTE.md
+          if ! git diff --cached --quiet; then
+            git commit -m "feat(origem): importar frontend completo do Yokira real main-ChatGPT"
+            git push origin HEAD:main
+          fi
