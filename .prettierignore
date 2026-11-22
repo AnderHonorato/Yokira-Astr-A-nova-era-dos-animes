@@ -12,3 +12,6 @@ src/lib/servidor/banco/gerado
 docs/evidencias
 test-results
 playwright-report
+
+# Frontend importado fielmente do Yokira publicado; formatado e testado isoladamente.
+versao-sites/

@@ -100,7 +100,7 @@
 - Esta lista: `CHECKLIST-UNIVERSO-YOKIRA.md` na raiz
 - Rotas a verificar: `/companheiros`, `/portal-astral`, `/biblioteca-magica`
 
-## 7. Identidade e conteúdo do site atual — correção de 22/11/2026
+## 7. Tentativa anterior de recriação visual (superada pela cópia fiel da seção 8)
 
 - [x] ✅ Identificada a causa do visual vazio: o banco anterior usava 14 títulos fictícios e imagens geradas, enquanto o [Yokira publicado](https://yokira-2-ander.honoratoann.chatgpt.site/) expõe 20 animes conhecidos.
 - [x] ✅ Recuperadas as 20 capas e as imagens largas de referência a partir dos arquivos do próprio projeto anterior (`Yokira-2.0/main-ChatGPT`).
@@ -116,3 +116,19 @@
 - [ ] ⏳ Igualar os demais componentes além da home: chat global, agenda, comunidade, amizades, salas, jogos e player do site publicado ainda exigem migração.
 - [ ] ⏳ Paridade total de comunidade, amizades, salas, jogos e agenda: existem no site publicado anterior, mas não foram portados integralmente para o backend SvelteKit atual.
 - [ ] ⏳ Fontes de episódios licenciados: importar somente com autorização; capas e metadados não equivalem a vídeos disponíveis.
+
+## 8. Correção da fonte e integração LAN — execução atual (22/11/2026)
+
+- [x] ✅ Identificada a **fonte exata do site publicado**: `Yokira-2.0`, branch `sol/identidade-login-temas-20261105`, commit `25afce82`. A branch `main-ChatGPT` era visualmente diferente.
+- [x] ✅ **448/448 arquivos** de `versao-sites/` copiados e validados por SHA no repositório novo; não foi recriada outra home.
+- [x] ✅ Layout, catálogo, player demo, salas, amizades, jogos, comunidade, chat e assets originais preservados no frontend React/Vinext.
+- [x] ✅ Backend D1 de **desenvolvimento** criado com 20 migrações originais e 39 tabelas, após backup e validação. Não foi restaurado banco de produção.
+- [x] ✅ Servidor Wi-Fi integrado usando a home original e encaminhamento das rotas de Companheiros, Portal Astral e Biblioteca Mágica ao SvelteKit.
+- [x] ✅ Links dos três recursos acrescentados ao menu Mais mobile, com retorno HTTP 200 para Companheiros.
+- [x] ✅ Validação de navegador 390px e 1440px: cenário, capas, banner One Piece e 0 erros JS observados.
+- [x] ✅ 157 testes do frontend original, TypeScript, mais 4 testes do gateway aprovados.
+- [ ] 🟡 **Conta única**: D1 e SQLite são bancos independentes. Login, lista, histórico, comunidade e XP não estão unificados.
+- [ ] 🟡 **Conexão real do player à evolução** com validação no servidor e proteção antiabuso.
+- [ ] ⏳ Quarto Otaku persistente, personalização avançada, formas animadas, IA opcional e missões integradas ainda faltam.
+- [ ] ⏳ Deploy público com autenticação e dados duráveis. A versão do Wi-Fi é **local**, não um novo site público.
+- [ ] ⏳ Teste presencial no celular real, inclusive login e persistência, ainda pendente.

@@ -40,7 +40,9 @@ export default [
       'static/',
       'playwright-report/',
       'test-results/',
-      'prisma/gerado/'
+      'prisma/gerado/',
+      // A aplicação React original tem ESLint e dependências próprios.
+      'versao-sites/'
     ]
   }
 ];
