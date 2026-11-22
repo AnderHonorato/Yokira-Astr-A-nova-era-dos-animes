@@ -1,0 +1,64 @@
+name: Importar site publicado fielmente
+on:
+  push:
+    paths:
+      - .github/workflows/importar-site-publicado-fiel.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Importar frontend real da branch que produz o site atual
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --branch sol/identidade-login-temas-20261105 \
+            https://github.com/AnderHonorato/Yokira-2.0.git \
+            /tmp/yokira-fiel
+          atual="$(git -C /tmp/yokira-fiel rev-parse HEAD)"
+          esperado="25afce82e1983f6add6397ea7a946a39ba673f0b"
+          if [[ "$atual" != "$esperado" ]]; then
+            echo "::error::A branch original mudou; pare e revise a origem antes de importar."
+            exit 1
+          fi
+          test -f /tmp/yokira-fiel/versao-sites/app/componentes/hero-identidade.css
+          test -f /tmp/yokira-fiel/versao-sites/app/portal.tsx
+          rm -rf versao-sites
+          mkdir -p versao-sites docs/origem
+          cp -a /tmp/yokira-fiel/versao-sites/. versao-sites/
+          cat > docs/origem/REPOSITORIO-FONTE.md <<'EOF'
+          # Origem confirmada da interface Yokira publicada
+
+          Site verificado: https://yokira-2-ander.honoratoann.chatgpt.site/
+
+          Fonte pública: https://github.com/AnderHonorato/Yokira-2.0/tree/sol/identidade-login-temas-20261105/versao-sites
+
+          Commit exato: `25afce82e1983f6add6397ea7a946a39ba673f0b`
+
+          Este diretório foi copiado integralmente de `versao-sites/` desse commit:
+          código de home, busca, navegação, catálogo, player, comunidade, amizades,
+          salas, jogos, assets, rotas, worker, migrações e testes de Sites.
+
+          A branch `main-ChatGPT` é uma versão diferente e mais antiga do frontend,
+          apesar do nome; sua home mostra "Todo anime é um novo universo" e não
+          corresponde à home publicada verificada ("Acervo de animes").
+
+          As funcionalidades novas dos mascotes, Portal Astral e Biblioteca Mágica
+          estão na aplicação SvelteKit/Prisma da raiz. A integração com autenticação
+          e persistência Cloudflare D1 do frontend precisa ser construída e validada.
+          Não se deve confundir código clonado com dados da produção nem prévia estática
+          com publicação completa.
+          EOF
+          git config user.name "Yokira CI"
+          git config user.email "200148189+AnderHonorato@users.noreply.github.com"
+          git add -A -f versao-sites
+          git add docs/origem/REPOSITORIO-FONTE.md
+          git commit -m "feat(origem): importar os 448 arquivos do frontend Yokira publicado"
+          git push origin HEAD:main
