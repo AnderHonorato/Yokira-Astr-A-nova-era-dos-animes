@@ -132,3 +132,4 @@
 - [ ] ⏳ Quarto Otaku persistente, personalização avançada, formas animadas, IA opcional e missões integradas ainda faltam.
 - [ ] ⏳ Deploy público com autenticação e dados duráveis. A versão do Wi-Fi é **local**, não um novo site público.
 - [ ] ⏳ Teste presencial no celular real, inclusive login e persistência, ainda pendente.
+- [ ] ⚠️ **Formatação legada:** `npm run formatar:checar` aponta aproximadamente 370 arquivos antigos da base SvelteKit fora do padrão Prettier. TypeScript e lint passam; corrigir a dívida de formatação em etapa separada, com revisão de diffs.
